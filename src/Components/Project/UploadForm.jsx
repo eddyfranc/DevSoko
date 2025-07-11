@@ -13,13 +13,13 @@ const UploadForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const user = auth.currentUser;
-      if (!user) {
-        setError("You must be logged in to upload a project.");
-        return;
-      }
+    const user = auth.currentUser;
+    if (!user) {
+      setError("You must be logged in to upload a project.");
+      return;
+    }
 
+    try {
       await addDoc(collection(db, "projects"), {
         title,
         description,
@@ -29,7 +29,6 @@ const UploadForm = () => {
         createdAt: serverTimestamp(),
       });
 
-      // Clear form + redirect
       setTitle("");
       setDescription("");
       setPrice("");

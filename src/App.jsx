@@ -4,6 +4,7 @@ import Register from './Pages/Register';
 import Login from './Pages/Login';
 import UploadProject from './Pages/UploadProject';
 import ViewProjects from './Pages/ViewProjects';
+import Dashboard from "./Pages/Dashboard";
 
 <Routes>
   <Route path="/" element={<Home />} />
@@ -11,6 +12,7 @@ import ViewProjects from './Pages/ViewProjects';
   <Route path="/login" element={<Login />} />
   <Route path="/upload" element={<UploadProject />} />
   <Route path="/projects" element={<ViewProjects />} />
+  <Route path="/dashboard" element={<Dashboard />} />
 </Routes>
 
 

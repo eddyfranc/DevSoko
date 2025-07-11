@@ -1,16 +1,19 @@
-// Import the functions you need from the SDKs you need
+// src/firebase.js
+
+// Import Firebase core + needed services
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+// Optional: import storage if you plan to upload files/images
+import { getStorage } from "firebase/storage";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Your Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAn7M63QERfckOeZmRv0oz3LXPRdz0sWiE",
   authDomain: "devsoko-f7bbc.firebaseapp.com",
   projectId: "devsoko-f7bbc",
-  storageBucket: "devsoko-f7bbc.firebasestorage.app",
+  storageBucket: "devsoko-f7bbc.appspot.com", // 🔧 corrected the domain here
   messagingSenderId: "446964726645",
   appId: "1:446964726645:web:7574424a4adf7334e9b13c",
   measurementId: "G-55DPCDVQFJ"
@@ -20,5 +23,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
-
+// Firebase services
 export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app); // optional — for file/image uploads

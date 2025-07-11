@@ -1,7 +1,27 @@
-import UploadForm from "../Components/Project/UploadForm";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Shared/Navbar";
+import UploadForm from "../Components/Project/UploadForm";
+import useUserRole from "../hooks/useUserRole";
+import { auth } from "../firebase";
 
 const UploadProject = () => {
+  const { role, loading } = useUserRole();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading) {
+      if (!auth.currentUser) {
+        navigate("/login");
+      } else if (role !== "seller") {
+        alert("Only sellers can upload projects.");
+        navigate("/projects");
+      }
+    }
+  }, [role, loading]);
+
+  if (loading) return <p className="text-center mt-10">Checking access...</p>;
+
   return (
     <>
       <Navbar />

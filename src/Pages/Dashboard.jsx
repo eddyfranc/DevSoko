@@ -1,21 +1,40 @@
 import { useEffect, useState } from "react";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../Components/Shared/Navbar";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useNavigate, Link } from "react-router-dom";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
+  const [role, setRole] = useState("");
+  const [projects, setProjects] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (!currentUser) {
+        navigate("/login");
       } else {
-        navigate("/login"); // redirect if not logged in
+        setUser(currentUser);
+
+        // Fetch role from Firestore
+        const userDoc = await db.collection("users").doc(currentUser.uid).get();
+        const userData = userDoc.data();
+        setRole(userData.role);
+
+        // If seller, fetch their projects
+        if (userData.role === "seller") {
+          const q = query(
+            collection(db, "projects"),
+            where("userId", "==", currentUser.uid)
+          );
+          const snapshot = await getDocs(q);
+          const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+          setProjects(list);
+        }
       }
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -25,23 +44,55 @@ const Dashboard = () => {
   };
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-        <h1 className="text-3xl font-bold mb-4 text-blue-600">Welcome to your Dashboard</h1>
-        {user && (
-          <div className="text-center">
-            <p className="text-lg mb-2">Logged in as: <span className="font-semibold">{user.email}</span></p>
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            >
-              Logout
-            </button>
-          </div>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+        <h2 className="text-2xl font-bold mb-2 text-blue-600">Welcome to your Dashboard</h2>
+        {user && <p className="mb-4 text-gray-700">Logged in as: {user.email}</p>}
+
+        {role === "seller" && (
+          <>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold">Your Projects</h3>
+              <Link
+                to="/upload"
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                + Upload Project
+              </Link>
+            </div>
+
+            {projects.length === 0 ? (
+              <p className="text-gray-500">You haven’t uploaded any projects yet.</p>
+            ) : (
+              <ul className="space-y-2">
+                {projects.map((proj) => (
+                  <li
+                    key={proj.id}
+                    className="border border-gray-200 rounded px-4 py-2 bg-gray-50"
+                  >
+                    <h4 className="font-semibold">{proj.title}</h4>
+                    <p className="text-sm text-gray-600">{proj.description}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
         )}
+
+        {role === "buyer" && (
+          <p className="text-gray-600">You are logged in as a buyer. Purchase history coming soon!</p>
+        )}
+
+        <div className="mt-6">
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+          >
+            Logout
+          </button>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

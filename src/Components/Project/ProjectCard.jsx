@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router-dom";
+
 const ProjectCard = ({ project }) => {
+  const navigate = useNavigate();
+
   const handleBuy = () => {
-    console.log(`Buyer wants to purchase: ${project.title} (Ksh ${project.price})`);
-    // Later → redirect to M-Pesa or open modal
+    navigate("/checkout", { state: { project } });
   };
 
   return (

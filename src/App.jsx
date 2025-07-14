@@ -5,6 +5,7 @@ import Login from './Pages/Login';
 import UploadProject from './Pages/UploadProject';
 import ViewProjects from './Pages/ViewProjects';
 import Dashboard from "./Pages/Dashboard";
+import Checkout from "./Pages/Checkout";
 
 <Routes>
   <Route path="/" element={<Home />} />
@@ -13,6 +14,7 @@ import Dashboard from "./Pages/Dashboard";
   <Route path="/upload" element={<UploadProject />} />
   <Route path="/projects" element={<ViewProjects />} />
   <Route path="/dashboard" element={<Dashboard />} />
+  <Route path="/checkout" element={<Checkout />} />
 </Routes>
 
 

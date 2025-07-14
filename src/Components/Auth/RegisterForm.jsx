@@ -24,7 +24,7 @@ const RegisterForm = () => {
         createdAt: new Date().toISOString(),
       });
 
-      navigate("/login");
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message);
     }

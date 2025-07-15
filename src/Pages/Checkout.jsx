@@ -1,67 +1,79 @@
-import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { auth, db } from "../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { useLocation } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 import Navbar from "../Components/Shared/Navbar";
 
 const Checkout = () => {
-  const navigate = useNavigate();
   const location = useLocation();
-  const project = location.state?.project;
+  const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [phone, setPhone] = useState("");
+  const queryParams = new URLSearchParams(location.search);
+  const projectId = queryParams.get("id");
 
   useEffect(() => {
-    if (!project) navigate("/projects"); // redirect if no project
-  }, [project, navigate]);
+    const fetchProject = async () => {
+      try {
+        const docRef = doc(db, "userProjects", projectId);
+        const docSnap = await getDoc(docRef);
 
-  const handleBuy = async (e) => {
-    e.preventDefault();
-    const user = auth.currentUser;
-    if (!user) return navigate("/login");
+        if (docSnap.exists()) {
+          setProject({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          console.log("Project not found.");
+        }
+      } catch (err) {
+        console.error("Error fetching project:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    // Simulate saving purchase
-    await addDoc(collection(db, "purchases"), {
-      buyerId: user.uid,
-      buyerEmail: user.email,
-      sellerEmail: project.email,
-      projectId: project.id,
-      projectTitle: project.title,
-      amount: project.price,
-      phoneNumber: phone,
-      status: "pending",
-      createdAt: serverTimestamp(),
-    });
+    if (projectId) {
+      fetchProject();
+    } else {
+      setLoading(false);
+    }
+  }, [projectId]);
 
-    alert("Purchase submitted! (M-Pesa integration coming soon)");
-    navigate("/projects");
+  const handleWhatsAppOrder = () => {
+    const phoneNumber = "254706867627"; // Change to your WhatsApp number
+    const message = `Hello, I’d like to buy the project "${project.title}" for KES ${project.price}. Is it available?`;
+    const encoded = encodeURIComponent(message);
+    const url = `https://wa.me/${phoneNumber}?text=${encoded}`;
+    window.open(url, "_blank");
   };
 
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-        <form onSubmit={handleBuy} className="bg-white p-6 rounded shadow-md w-full max-w-lg">
-          <h2 className="text-2xl font-bold mb-4 text-center">Confirm Purchase</h2>
-          <p className="mb-2"><strong>Project:</strong> {project?.title}</p>
-          <p className="mb-4"><strong>Price:</strong> Ksh {project?.price}</p>
+      <div className="min-h-screen bg-gray-100 p-6 flex justify-center items-center">
+        <div className="bg-white p-6 rounded shadow w-full max-w-lg">
+          {loading ? (
+            <p>Loading project...</p>
+          ) : !project ? (
+            <p className="text-red-600">Project not found.</p>
+          ) : (
+            <>
+              <h2 className="text-2xl font-bold mb-4">{project.title}</h2>
+              <img
+                src={project.imageUrl}
+                alt={project.title}
+                className="w-full h-64 object-cover rounded mb-4"
+              />
+              <p className="mb-2">{project.description}</p>
+              <p className="font-semibold text-green-700 mb-4">Price: KES {project.price}</p>
 
-          <input
-            type="tel"
-            placeholder="Your M-Pesa Number"
-            className="w-full p-2 mb-4 border rounded"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-          />
-
-          <button
-            type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-          >
-            Pay with M-Pesa
-          </button>
-        </form>
+              <button
+                onClick={handleWhatsAppOrder}
+                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+              >
+                Order via WhatsApp
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </>
   );

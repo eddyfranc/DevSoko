@@ -1,79 +1,84 @@
+// src/Components/Project/UploadForm.jsx
 import { useState } from "react";
-import { auth, db } from "../../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { db, auth } from "../../firebase";
 
 const UploadForm = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const user = auth.currentUser;
-    if (!user) {
-      setError("You must be logged in to upload a project.");
-      return;
+    if (!title || !description || !price) {
+      return alert("Please fill in all fields.");
     }
 
     try {
-      await addDoc(collection(db, "projects"), {
+      setLoading(true);
+
+      await addDoc(collection(db, "userProjects"), {
         title,
         description,
-        price,
-        userId: user.uid,
-        email: user.email,
-        createdAt: serverTimestamp(),
+        price: parseFloat(price),
+        userId: auth.currentUser.uid,
+        createdAt: Timestamp.now()
       });
 
+      setMessage("✅ Project uploaded successfully!");
       setTitle("");
       setDescription("");
       setPrice("");
-      navigate("/dashboard");
-    } catch (err) {
-      setError("Failed to upload project: " + err.message);
+    } catch (error) {
+      console.error("Upload error:", error);
+      setMessage("❌ Failed to upload. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-lg">
-      <h2 className="text-2xl font-bold mb-4 text-center">Upload Your Project</h2>
-      {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white p-6 rounded shadow w-full max-w-lg space-y-4"
+    >
+      <h2 className="text-xl font-bold">Upload Project</h2>
+
+      {message && <p className="text-sm">{message}</p>}
 
       <input
         type="text"
         placeholder="Project Title"
-        className="w-full p-2 mb-4 border rounded"
+        className="w-full border p-2 rounded"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        required
       />
 
       <textarea
-        placeholder="Description"
-        className="w-full p-2 mb-4 border rounded"
+        placeholder="Project Description"
+        className="w-full border p-2 rounded"
+        rows={4}
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        required
       />
 
       <input
         type="number"
         placeholder="Price (KES)"
-        className="w-full p-2 mb-4 border rounded"
+        className="w-full border p-2 rounded"
         value={price}
         onChange={(e) => setPrice(e.target.value)}
-        required
       />
 
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+        disabled={loading}
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
       >
-        Upload Project
+        {loading ? "Uploading..." : "Submit Project"}
       </button>
     </form>
   );

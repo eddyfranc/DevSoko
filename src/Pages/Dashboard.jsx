@@ -7,7 +7,7 @@ import {
   query,
   where,
   doc,
-  getDoc
+  getDoc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
@@ -24,6 +24,7 @@ const Dashboard = () => {
         navigate("/login");
       } else {
         setUser(currentUser);
+        console.log("🔥 Logged in user:", currentUser.uid);
 
         try {
           const userRef = doc(db, "users", currentUser.uid);
@@ -32,22 +33,25 @@ const Dashboard = () => {
           if (userSnap.exists()) {
             const userData = userSnap.data();
             setRole(userData.role);
+            console.log("🧠 Role:", userData.role);
 
             if (userData.role === "seller") {
               const q = query(
-                collection(db, "userProjects"), // renamed to avoid reserved word
+                collection(db, "userProjects"), // adjust if your collection is named differently
                 where("userId", "==", currentUser.uid)
               );
               const snapshot = await getDocs(q);
               const list = snapshot.docs.map((doc) => ({
                 id: doc.id,
-                ...doc.data()
+                ...doc.data(),
               }));
               setProjects(list);
             }
+          } else {
+            console.warn("⚠️ No user document found in Firestore.");
           }
         } catch (err) {
-          console.error("Firestore error:", err.message);
+          console.error("❌ Firestore error:", err.message);
         }
       }
     });
@@ -74,7 +78,9 @@ const Dashboard = () => {
           <div>
             <h3 className="text-xl font-semibold mb-4">Your Projects</h3>
             {projects.length === 0 ? (
-              <p className="text-gray-500">You haven’t uploaded any projects yet.</p>
+              <p className="text-gray-500">
+                You haven’t uploaded any projects yet.
+              </p>
             ) : (
               <ul className="space-y-2">
                 {projects.map((proj) => (
@@ -83,7 +89,9 @@ const Dashboard = () => {
                     className="border border-gray-200 rounded px-4 py-2 bg-gray-50"
                   >
                     <h4 className="font-semibold">{proj.title}</h4>
-                    <p className="text-sm text-gray-600">{proj.description}</p>
+                    <p className="text-sm text-gray-600">
+                      {proj.description}
+                    </p>
                   </li>
                 ))}
               </ul>
@@ -94,14 +102,20 @@ const Dashboard = () => {
         return (
           <div>
             <h3 className="text-xl font-semibold mb-4">Sales</h3>
-            <p className="text-gray-600">Sales stats and reports coming soon!</p>
+            <p className="text-gray-600">
+              Sales stats and reports coming soon!
+            </p>
           </div>
         );
       default:
         return (
           <div>
-            <h3 className="text-xl font-semibold mb-4 text-blue-600">Welcome to your Dashboard</h3>
-            <p className="text-gray-600">Select an option from the sidebar to get started.</p>
+            <h3 className="text-xl font-semibold mb-4 text-blue-600">
+              Welcome to your Dashboard
+            </h3>
+            <p className="text-gray-600">
+              Select an option from the sidebar to get started.
+            </p>
           </div>
         );
     }
@@ -122,7 +136,9 @@ const Dashboard = () => {
           <button
             onClick={() => setActiveTab("home")}
             className={`block w-full text-left px-4 py-2 rounded ${
-              activeTab === "home" ? "bg-blue-100 text-blue-700" : "hover:bg-gray-100"
+              activeTab === "home"
+                ? "bg-blue-100 text-blue-700"
+                : "hover:bg-gray-100"
             }`}
           >
             Dashboard Home
@@ -132,7 +148,9 @@ const Dashboard = () => {
               <button
                 onClick={() => setActiveTab("upload")}
                 className={`block w-full text-left px-4 py-2 rounded ${
-                  activeTab === "upload" ? "bg-blue-100 text-blue-700" : "hover:bg-gray-100"
+                  activeTab === "upload"
+                    ? "bg-blue-100 text-blue-700"
+                    : "hover:bg-gray-100"
                 }`}
               >
                 Upload Project
@@ -140,7 +158,9 @@ const Dashboard = () => {
               <button
                 onClick={() => setActiveTab("projects")}
                 className={`block w-full text-left px-4 py-2 rounded ${
-                  activeTab === "projects" ? "bg-blue-100 text-blue-700" : "hover:bg-gray-100"
+                  activeTab === "projects"
+                    ? "bg-blue-100 text-blue-700"
+                    : "hover:bg-gray-100"
                 }`}
               >
                 My Projects
@@ -148,7 +168,9 @@ const Dashboard = () => {
               <button
                 onClick={() => setActiveTab("sales")}
                 className={`block w-full text-left px-4 py-2 rounded ${
-                  activeTab === "sales" ? "bg-blue-100 text-blue-700" : "hover:bg-gray-100"
+                  activeTab === "sales"
+                    ? "bg-blue-100 text-blue-700"
+                    : "hover:bg-gray-100"
                 }`}
               >
                 Sales

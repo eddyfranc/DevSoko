@@ -11,21 +11,28 @@ const UploadProject = () => {
 
   useEffect(() => {
     if (!loading) {
-      if (!auth.currentUser) {
+      const user = auth.currentUser;
+      if (!user) {
         navigate("/login");
       } else if (role !== "seller") {
         alert("Only sellers can upload projects.");
         navigate("/projects");
       }
     }
-  }, [role, loading]);
+  }, [loading, role, navigate]);
 
-  if (loading) return <p className="text-center mt-10">Checking access...</p>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-600 text-lg">Checking access...</p>
+      </div>
+    );
+  }
 
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
         <UploadForm />
       </div>
     </>

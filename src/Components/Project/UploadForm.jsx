@@ -1,40 +1,55 @@
 // src/Components/Project/UploadForm.jsx
 import { useState } from "react";
+import { db, auth, storage } from "../../firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
-import { db, auth } from "../../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const UploadForm = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage("");
 
-    if (!title || !description || !price) {
-      return alert("Please fill in all fields.");
+    if (!title || !description || !price || !imageFile) {
+      setMessage("⚠️ Fill in all fields and select an image.");
+      setLoading(false);
+      return;
     }
 
     try {
-      setLoading(true);
+      // Step 1: Upload image to Firebase Storage
+      const imageRef = ref(
+        storage,
+        `projectImages/${auth.currentUser.uid}/${Date.now()}_${imageFile.name}`
+      );
+      await uploadBytes(imageRef, imageFile);
+      const imageUrl = await getDownloadURL(imageRef);
 
+      // Step 2: Save project info in Firestore
       await addDoc(collection(db, "userProjects"), {
         title,
         description,
         price: parseFloat(price),
         userId: auth.currentUser.uid,
-        createdAt: Timestamp.now()
+        imageUrl,
+        createdAt: Timestamp.now(),
       });
 
       setMessage("✅ Project uploaded successfully!");
       setTitle("");
       setDescription("");
       setPrice("");
+      setImageFile(null);
     } catch (error) {
-      console.error("Upload error:", error);
-      setMessage("❌ Failed to upload. Try again.");
+      console.error("Upload failed:", error.message);
+      setMessage("❌ Failed to upload project.");
     } finally {
       setLoading(false);
     }
@@ -46,8 +61,7 @@ const UploadForm = () => {
       className="bg-white p-6 rounded shadow w-full max-w-lg space-y-4"
     >
       <h2 className="text-xl font-bold">Upload Project</h2>
-
-      {message && <p className="text-sm">{message}</p>}
+      {message && <p className="text-sm text-blue-600">{message}</p>}
 
       <input
         type="text"
@@ -58,9 +72,9 @@ const UploadForm = () => {
       />
 
       <textarea
-        placeholder="Project Description"
+        placeholder="Description"
         className="w-full border p-2 rounded"
-        rows={4}
+        rows={3}
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
@@ -71,6 +85,13 @@ const UploadForm = () => {
         className="w-full border p-2 rounded"
         value={price}
         onChange={(e) => setPrice(e.target.value)}
+      />
+
+      <input
+        type="file"
+        accept="image/*"
+        className="w-full border p-2 rounded"
+        onChange={(e) => setImageFile(e.target.files[0])}
       />
 
       <button

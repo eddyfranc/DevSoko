@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  getDoc
+} from "firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
 
 const Dashboard = () => {
@@ -17,26 +24,33 @@ const Dashboard = () => {
       } else {
         setUser(currentUser);
 
-        // Fetch role from Firestore
-        const userDoc = await db.collection("users").doc(currentUser.uid).get();
-        const userData = userDoc.data();
-        setRole(userData.role);
+        // ✅ Modern Firestore syntax (Firebase v9+)
+        const userRef = doc(db, "users", currentUser.uid);
+        const userSnap = await getDoc(userRef);
 
-        // If seller, fetch their projects
-        if (userData.role === "seller") {
-          const q = query(
-            collection(db, "projects"),
-            where("userId", "==", currentUser.uid)
-          );
-          const snapshot = await getDocs(q);
-          const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-          setProjects(list);
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          setRole(userData.role);
+
+          // Fetch projects if user is seller
+          if (userData.role === "seller") {
+            const q = query(
+              collection(db, "projects"),
+              where("userId", "==", currentUser.uid)
+            );
+            const snapshot = await getDocs(q);
+            const list = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data()
+            }));
+            setProjects(list);
+          }
         }
       }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [navigate]);
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -49,6 +63,7 @@ const Dashboard = () => {
         <h2 className="text-2xl font-bold mb-2 text-blue-600">Welcome to your Dashboard</h2>
         {user && <p className="mb-4 text-gray-700">Logged in as: {user.email}</p>}
 
+        {/* Seller View */}
         {role === "seller" && (
           <>
             <div className="flex justify-between items-center mb-4">
@@ -79,8 +94,14 @@ const Dashboard = () => {
           </>
         )}
 
+        {/* Buyer View */}
         {role === "buyer" && (
           <p className="text-gray-600">You are logged in as a buyer. Purchase history coming soon!</p>
+        )}
+
+        {/* Default or unknown role */}
+        {role && role !== "buyer" && role !== "seller" && (
+          <p className="text-gray-600">You are logged in as: {role}</p>
         )}
 
         <div className="mt-6">

@@ -24,27 +24,29 @@ const Dashboard = () => {
       } else {
         setUser(currentUser);
 
-        // ✅ Modern Firestore syntax (Firebase v9+)
-        const userRef = doc(db, "users", currentUser.uid);
-        const userSnap = await getDoc(userRef);
+        try {
+          const userRef = doc(db, "users", currentUser.uid);
+          const userSnap = await getDoc(userRef);
 
-        if (userSnap.exists()) {
-          const userData = userSnap.data();
-          setRole(userData.role);
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            setRole(userData.role);
 
-          // Fetch projects if user is seller
-          if (userData.role === "seller") {
-            const q = query(
-              collection(db, "projects"),
-              where("userId", "==", currentUser.uid)
-            );
-            const snapshot = await getDocs(q);
-            const list = snapshot.docs.map((doc) => ({
-              id: doc.id,
-              ...doc.data()
-            }));
-            setProjects(list);
+            if (userData.role === "seller") {
+              const q = query(
+                collection(db, "userProjects"), // 🔁 Changed from "projects"
+                where("userId", "==", currentUser.uid)
+              );
+              const snapshot = await getDocs(q);
+              const list = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data()
+              }));
+              setProjects(list);
+            }
           }
+        } catch (err) {
+          console.error("🔥 Firestore error:", err.message);
         }
       }
     });
@@ -97,11 +99,6 @@ const Dashboard = () => {
         {/* Buyer View */}
         {role === "buyer" && (
           <p className="text-gray-600">You are logged in as a buyer. Purchase history coming soon!</p>
-        )}
-
-        {/* Default or unknown role */}
-        {role && role !== "buyer" && role !== "seller" && (
-          <p className="text-gray-600">You are logged in as: {role}</p>
         )}
 
         <div className="mt-6">

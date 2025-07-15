@@ -10,6 +10,8 @@ import {
   getDoc
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import UploadForm from "../Components/Project/UploadForm";
+
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -63,12 +65,12 @@ const Dashboard = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "upload":
-        return (
-          <div>
-            <h3 className="text-xl font-semibold mb-4">Upload Project</h3>
-            <p className="text-gray-600">Project upload form coming soon!</p>
-          </div>
-        );
+    return (
+      <div>
+        <h3 className="text-xl font-semibold mb-4">Upload Project</h3>
+        <UploadForm />
+      </div>
+    );
       case "projects":
         return (
           <div>

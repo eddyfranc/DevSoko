@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import UploadForm from "../Components/Project/UploadForm";
 
@@ -11,7 +18,6 @@ const Dashboard = () => {
   const [projects, setProjects] = useState([]);
   const [activeTab, setActiveTab] = useState("home");
   const navigate = useNavigate();
-  const db = getFirestore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -19,29 +25,34 @@ const Dashboard = () => {
         navigate("/login");
       } else {
         setUser(currentUser);
-
         try {
           const userRef = doc(db, "users", currentUser.uid);
           const userSnap = await getDoc(userRef);
-
           if (userSnap.exists()) {
             const userData = userSnap.data();
             setRole(userData.role);
 
             if (userData.role === "seller") {
-              // Fetch projects from localStorage
-              const localProjects = JSON.parse(localStorage.getItem("myProjects")) || [];
-              setProjects(localProjects);
+              const q = query(
+                collection(db, "userProjects"),
+                where("userId", "==", currentUser.uid)
+              );
+              const snapshot = await getDocs(q);
+              const list = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              }));
+              setProjects(list);
             }
           }
         } catch (err) {
-          console.warn("Error loading user:", err.message);
+          // Silent fail
         }
       }
     });
 
     return () => unsubscribe();
-  }, [navigate, db]);
+  }, [navigate]);
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -49,62 +60,103 @@ const Dashboard = () => {
   };
 
   const renderContent = () => {
-    switch (activeTab) {
-      case "upload":
-        return (
-          <div>
-            <h3 className="text-xl font-semibold mb-4">Upload Project</h3>
-            <UploadForm />
-          </div>
-        );
-      case "projects":
-        return (
-          <div>
-            <h3 className="text-xl font-semibold mb-4">Your Projects</h3>
-            {projects.length === 0 ? (
-              <p className="text-gray-500">
-                You haven’t uploaded any projects yet.
+    if (role === "seller") {
+      switch (activeTab) {
+        case "upload":
+          return (
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Upload Project</h3>
+              <UploadForm />
+            </div>
+          );
+        case "projects":
+          return (
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Your Projects</h3>
+              {projects.length === 0 ? (
+                <p className="text-gray-500">
+                  You haven’t uploaded any projects yet.
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {projects.map((proj) => (
+                    <li
+                      key={proj.id}
+                      className="border border-gray-200 rounded px-4 py-2 bg-gray-50"
+                    >
+                      <h4 className="font-semibold">{proj.title}</h4>
+                      <p className="text-sm text-gray-600">
+                        {proj.description}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          );
+        case "sales":
+          return (
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Sales</h3>
+              <p className="text-gray-600">
+                Sales stats and reports coming soon!
               </p>
-            ) : (
-              <ul className="space-y-4">
-                {projects.map((proj) => (
-                  <li
-                    key={proj.id}
-                    className="border border-gray-200 rounded p-4 bg-white shadow"
-                  >
-                    <h4 className="font-semibold text-lg">{proj.title}</h4>
-                    <img
-                      src={proj.imageUrl}
-                      alt={proj.title}
-                      className="w-full h-48 object-cover rounded my-2"
-                    />
-                    <p className="text-gray-700">{proj.description}</p>
-                    <p className="text-green-600 font-semibold">KES {proj.price}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        );
-      case "sales":
-        return (
-          <div>
-            <h3 className="text-xl font-semibold mb-4">Sales</h3>
-            <p className="text-gray-600">Sales stats and reports coming soon!</p>
-          </div>
-        );
-      default:
-        return (
-          <div>
-            <h3 className="text-xl font-semibold mb-4 text-blue-600">
-              Welcome to your Dashboard
-            </h3>
-            <p className="text-gray-600">
-              Select an option from the sidebar to get started.
-            </p>
-          </div>
-        );
+            </div>
+          );
+        default:
+          return (
+            <div>
+              <h3 className="text-xl font-semibold mb-4 text-blue-600">
+                Welcome to your Dashboard
+              </h3>
+              <p className="text-gray-600">
+                Select an option from the sidebar to get started.
+              </p>
+            </div>
+          );
+      }
     }
+
+    // BUYER VIEW
+    const allProjects = JSON.parse(localStorage.getItem("allProjects")) || [];
+    return (
+      <div>
+        <h3 className="text-xl font-semibold mb-4 text-blue-600">
+          Browse Projects
+        </h3>
+
+        {allProjects.length === 0 ? (
+          <p className="text-gray-500">No projects available.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {allProjects.map((proj) => (
+              <div
+                key={proj.id}
+                className="bg-white rounded shadow p-4 border border-gray-200"
+              >
+                <img
+                  src={proj.imageUrl}
+                  alt={proj.title}
+                  className="w-full h-48 object-cover rounded mb-3"
+                />
+                <h2 className="text-lg font-semibold text-gray-800">
+                  {proj.title}
+                </h2>
+                <p className="text-sm text-gray-600 mb-2">
+                  {proj.description?.slice(0, 100)}...
+                </p>
+                <p className="font-bold text-green-600 mb-3">
+                  KES {proj.price}
+                </p>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                  Buy Now
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -129,6 +181,7 @@ const Dashboard = () => {
           >
             Dashboard Home
           </button>
+
           {role === "seller" && (
             <>
               <button
@@ -163,6 +216,7 @@ const Dashboard = () => {
               </button>
             </>
           )}
+
           <button
             onClick={handleLogout}
             className="block w-full text-left px-4 py-2 rounded bg-red-100 text-red-600 hover:bg-red-200 mt-4"

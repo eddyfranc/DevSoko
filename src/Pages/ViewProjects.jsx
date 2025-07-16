@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
 import { Link } from "react-router-dom";
 import Navbar from "../Components/Shared/Navbar";
 
@@ -9,19 +7,13 @@ const ViewProjects = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const snapshot = await getDocs(collection(db, "userProjects"));
-        const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        setProjects(list);
-      } catch (err) {
-        console.error("Error fetching projects:", err);
-      } finally {
-        setLoading(false);
-      }
+    const fetchLocalProjects = () => {
+      const all = JSON.parse(localStorage.getItem("allProjects")) || [];
+      setProjects(all);
+      setLoading(false);
     };
 
-    fetchProjects();
+    fetchLocalProjects();
   }, []);
 
   return (
@@ -48,7 +40,7 @@ const ViewProjects = () => {
                   />
                   <h2 className="text-lg font-semibold text-gray-800">{proj.title}</h2>
                   <p className="text-sm text-gray-600 mb-2">
-                    {proj.description.slice(0, 100)}...
+                    {proj.description?.slice(0, 100)}...
                   </p>
                   <p className="font-bold text-green-600 mb-3">KES {proj.price}</p>
                   <Link

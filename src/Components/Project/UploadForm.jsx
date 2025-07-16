@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { auth } from "../../firebase";
+import { v4 as uuidv4 } from "uuid";
 
 const UploadForm = () => {
   const [title, setTitle] = useState("");
@@ -12,31 +14,32 @@ const UploadForm = () => {
     setMessage("");
 
     if (!title || !description || !price || !imageFile) {
-      setMessage(" Fill in all fields and select an image.");
+      setMessage("Please fill in all fields and select an image.");
       return;
     }
 
-    // Convert image to base64
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64Image = reader.result;
 
       const newProject = {
-        id: Date.now(),
+        id: uuidv4(),
         title,
         description,
         price,
         imageUrl: base64Image,
+        userId: auth.currentUser?.uid || "guest",
       };
 
-      const existing = JSON.parse(localStorage.getItem("myProjects")) || [];
-      localStorage.setItem("myProjects", JSON.stringify([...existing, newProject]));
-            // Save to global "allProjects"
-      const all = JSON.parse(localStorage.getItem("allProjects")) || [];
-      localStorage.setItem("allProjects", JSON.stringify([...all, newProject]));
+      // Save to "myProjects" (seller-specific)
+      const myList = JSON.parse(localStorage.getItem("myProjects")) || [];
+      localStorage.setItem("myProjects", JSON.stringify([...myList, newProject]));
 
+      // Save to "allProjects" (global for buyers)
+      const allList = JSON.parse(localStorage.getItem("allProjects")) || [];
+      localStorage.setItem("allProjects", JSON.stringify([...allList, newProject]));
 
-      setMessage(" Project saved locally!");
+      setMessage("Project saved locally!");
       setTitle("");
       setDescription("");
       setPrice("");
@@ -51,8 +54,8 @@ const UploadForm = () => {
       onSubmit={handleSubmit}
       className="bg-white p-6 rounded shadow w-full max-w-lg space-y-4"
     >
-      <h2 className="text-xl font-bold">Upload Project</h2>
-      {message && <p className="text-sm text-blue-600">{message}</p>}
+      <h2 className="text-xl font-bold text-blue-600">Upload Project</h2>
+      {message && <p className="text-sm text-green-600">{message}</p>}
 
       <input
         type="text"

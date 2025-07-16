@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import UploadForm from "../Components/Project/UploadForm";
 
@@ -17,6 +10,7 @@ const Dashboard = () => {
   const [role, setRole] = useState("");
   const [projects, setProjects] = useState([]);
   const [activeTab, setActiveTab] = useState("home");
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,20 +27,14 @@ const Dashboard = () => {
             setRole(userData.role);
 
             if (userData.role === "seller") {
-              const q = query(
-                collection(db, "userProjects"),
-                where("userId", "==", currentUser.uid)
-              );
-              const snapshot = await getDocs(q);
-              const list = snapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-              }));
-              setProjects(list);
+              const localProjects = JSON.parse(localStorage.getItem("myProjects")) || [];
+              setProjects(localProjects);
             }
           }
         } catch (err) {
-          // Silent fail
+          console.error("Error fetching user:", err.message);
+        } finally {
+          setLoading(false);
         }
       }
     });
@@ -74,9 +62,7 @@ const Dashboard = () => {
             <div>
               <h3 className="text-xl font-semibold mb-4">Your Projects</h3>
               {projects.length === 0 ? (
-                <p className="text-gray-500">
-                  You haven’t uploaded any projects yet.
-                </p>
+                <p className="text-gray-500">You haven’t uploaded any projects yet.</p>
               ) : (
                 <ul className="space-y-2">
                   {projects.map((proj) => (
@@ -85,9 +71,7 @@ const Dashboard = () => {
                       className="border border-gray-200 rounded px-4 py-2 bg-gray-50"
                     >
                       <h4 className="font-semibold">{proj.title}</h4>
-                      <p className="text-sm text-gray-600">
-                        {proj.description}
-                      </p>
+                      <p className="text-sm text-gray-600">{proj.description}</p>
                     </li>
                   ))}
                 </ul>
@@ -98,33 +82,24 @@ const Dashboard = () => {
           return (
             <div>
               <h3 className="text-xl font-semibold mb-4">Sales</h3>
-              <p className="text-gray-600">
-                Sales stats and reports coming soon!
-              </p>
+              <p className="text-gray-600">Sales stats and reports coming soon!</p>
             </div>
           );
         default:
           return (
             <div>
-              <h3 className="text-xl font-semibold mb-4 text-blue-600">
-                Welcome to your Dashboard
-              </h3>
-              <p className="text-gray-600">
-                Select an option from the sidebar to get started.
-              </p>
+              <h3 className="text-xl font-semibold mb-4 text-blue-600">Welcome to your Dashboard</h3>
+              <p className="text-gray-600">Select an option from the sidebar to get started.</p>
             </div>
           );
       }
     }
 
-    // BUYER VIEW
+    // Buyer View
     const allProjects = JSON.parse(localStorage.getItem("allProjects")) || [];
     return (
       <div>
-        <h3 className="text-xl font-semibold mb-4 text-blue-600">
-          Browse Projects
-        </h3>
-
+        <h3 className="text-xl font-semibold mb-4 text-blue-600">Browse Projects</h3>
         {allProjects.length === 0 ? (
           <p className="text-gray-500">No projects available.</p>
         ) : (
@@ -139,16 +114,13 @@ const Dashboard = () => {
                   alt={proj.title}
                   className="w-full h-48 object-cover rounded mb-3"
                 />
-                <h2 className="text-lg font-semibold text-gray-800">
-                  {proj.title}
-                </h2>
-                <p className="text-sm text-gray-600 mb-2">
-                  {proj.description?.slice(0, 100)}...
-                </p>
-                <p className="font-bold text-green-600 mb-3">
-                  KES {proj.price}
-                </p>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                <h2 className="text-lg font-semibold text-gray-800">{proj.title}</h2>
+                <p className="text-sm text-gray-600 mb-2">{proj.description?.slice(0, 100)}...</p>
+                <p className="font-bold text-green-600 mb-3">KES {proj.price}</p>
+                <button
+                  onClick={() => navigate(`/checkout?id=${proj.id}`)}
+                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
                   Buy Now
                 </button>
               </div>
@@ -158,6 +130,14 @@ const Dashboard = () => {
       </div>
     );
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-600 text-lg">Loading dashboard...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex bg-gray-100">
@@ -174,9 +154,7 @@ const Dashboard = () => {
           <button
             onClick={() => setActiveTab("home")}
             className={`block w-full text-left px-4 py-2 rounded ${
-              activeTab === "home"
-                ? "bg-blue-100 text-blue-700"
-                : "hover:bg-gray-100"
+              activeTab === "home" ? "bg-blue-100 text-blue-700" : "hover:bg-gray-100"
             }`}
           >
             Dashboard Home
@@ -187,9 +165,7 @@ const Dashboard = () => {
               <button
                 onClick={() => setActiveTab("upload")}
                 className={`block w-full text-left px-4 py-2 rounded ${
-                  activeTab === "upload"
-                    ? "bg-blue-100 text-blue-700"
-                    : "hover:bg-gray-100"
+                  activeTab === "upload" ? "bg-blue-100 text-blue-700" : "hover:bg-gray-100"
                 }`}
               >
                 Upload Project
@@ -197,9 +173,7 @@ const Dashboard = () => {
               <button
                 onClick={() => setActiveTab("projects")}
                 className={`block w-full text-left px-4 py-2 rounded ${
-                  activeTab === "projects"
-                    ? "bg-blue-100 text-blue-700"
-                    : "hover:bg-gray-100"
+                  activeTab === "projects" ? "bg-blue-100 text-blue-700" : "hover:bg-gray-100"
                 }`}
               >
                 My Projects
@@ -207,9 +181,7 @@ const Dashboard = () => {
               <button
                 onClick={() => setActiveTab("sales")}
                 className={`block w-full text-left px-4 py-2 rounded ${
-                  activeTab === "sales"
-                    ? "bg-blue-100 text-blue-700"
-                    : "hover:bg-gray-100"
+                  activeTab === "sales" ? "bg-blue-100 text-blue-700" : "hover:bg-gray-100"
                 }`}
               >
                 Sales

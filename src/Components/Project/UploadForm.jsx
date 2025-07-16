@@ -12,7 +12,7 @@ const UploadForm = () => {
     setMessage("");
 
     if (!title || !description || !price || !imageFile) {
-      setMessage("⚠️ Fill in all fields and select an image.");
+      setMessage(" Fill in all fields and select an image.");
       return;
     }
 
@@ -31,8 +31,12 @@ const UploadForm = () => {
 
       const existing = JSON.parse(localStorage.getItem("myProjects")) || [];
       localStorage.setItem("myProjects", JSON.stringify([...existing, newProject]));
+            // Save to global "allProjects"
+      const all = JSON.parse(localStorage.getItem("allProjects")) || [];
+      localStorage.setItem("allProjects", JSON.stringify([...all, newProject]));
 
-      setMessage("✅ Project saved locally!");
+
+      setMessage(" Project saved locally!");
       setTitle("");
       setDescription("");
       setPrice("");

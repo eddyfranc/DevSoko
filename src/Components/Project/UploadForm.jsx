@@ -1,58 +1,45 @@
-// src/Components/Project/UploadForm.jsx
 import { useState } from "react";
-import { db, auth, storage } from "../../firebase";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const UploadForm = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [imageFile, setImageFile] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setMessage("");
 
     if (!title || !description || !price || !imageFile) {
       setMessage("⚠️ Fill in all fields and select an image.");
-      setLoading(false);
       return;
     }
 
-    try {
-      // Step 1: Upload image to Firebase Storage
-      const imageRef = ref(
-        storage,
-        `projectImages/${auth.currentUser.uid}/${Date.now()}_${imageFile.name}`
-      );
-      await uploadBytes(imageRef, imageFile);
-      const imageUrl = await getDownloadURL(imageRef);
+    // Convert image to base64
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Image = reader.result;
 
-      // Step 2: Save project info in Firestore
-      await addDoc(collection(db, "userProjects"), {
+      const newProject = {
+        id: Date.now(),
         title,
         description,
-        price: parseFloat(price),
-        userId: auth.currentUser.uid,
-        imageUrl,
-        createdAt: Timestamp.now(),
-      });
+        price,
+        imageUrl: base64Image,
+      };
 
-      setMessage("✅ Project uploaded successfully!");
+      const existing = JSON.parse(localStorage.getItem("myProjects")) || [];
+      localStorage.setItem("myProjects", JSON.stringify([...existing, newProject]));
+
+      setMessage("✅ Project saved locally!");
       setTitle("");
       setDescription("");
       setPrice("");
       setImageFile(null);
-    } catch (error) {
-      console.error("Upload failed:", error.message);
-      setMessage("❌ Failed to upload project.");
-    } finally {
-      setLoading(false);
-    }
+    };
+
+    reader.readAsDataURL(imageFile);
   };
 
   return (
@@ -96,10 +83,9 @@ const UploadForm = () => {
 
       <button
         type="submit"
-        disabled={loading}
         className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
       >
-        {loading ? "Uploading..." : "Submit Project"}
+        Upload Project
       </button>
     </form>
   );

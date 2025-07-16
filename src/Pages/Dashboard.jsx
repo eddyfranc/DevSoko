@@ -1,17 +1,9 @@
 import { useEffect, useState } from "react";
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  doc,
-  getDoc
-} from "firebase/firestore";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import UploadForm from "../Components/Project/UploadForm";
-
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -19,6 +11,7 @@ const Dashboard = () => {
   const [projects, setProjects] = useState([]);
   const [activeTab, setActiveTab] = useState("home");
   const navigate = useNavigate();
+  const db = getFirestore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -36,26 +29,19 @@ const Dashboard = () => {
             setRole(userData.role);
 
             if (userData.role === "seller") {
-              const q = query(
-                collection(db, "userProjects"),
-                where("userId", "==", currentUser.uid)
-              );
-              const snapshot = await getDocs(q);
-              const list = snapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data()
-              }));
-              setProjects(list);
+              // Fetch projects from localStorage
+              const localProjects = JSON.parse(localStorage.getItem("myProjects")) || [];
+              setProjects(localProjects);
             }
           }
         } catch (err) {
-          // Silent catch for production
+          console.warn("Error loading user:", err.message);
         }
       }
     });
 
     return () => unsubscribe();
-  }, [navigate]);
+  }, [navigate, db]);
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -65,12 +51,12 @@ const Dashboard = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "upload":
-    return (
-      <div>
-        <h3 className="text-xl font-semibold mb-4">Upload Project</h3>
-        <UploadForm />
-      </div>
-    );
+        return (
+          <div>
+            <h3 className="text-xl font-semibold mb-4">Upload Project</h3>
+            <UploadForm />
+          </div>
+        );
       case "projects":
         return (
           <div>
@@ -80,14 +66,20 @@ const Dashboard = () => {
                 You haven’t uploaded any projects yet.
               </p>
             ) : (
-              <ul className="space-y-2">
+              <ul className="space-y-4">
                 {projects.map((proj) => (
                   <li
                     key={proj.id}
-                    className="border border-gray-200 rounded px-4 py-2 bg-gray-50"
+                    className="border border-gray-200 rounded p-4 bg-white shadow"
                   >
-                    <h4 className="font-semibold">{proj.title}</h4>
-                    <p className="text-sm text-gray-600">{proj.description}</p>
+                    <h4 className="font-semibold text-lg">{proj.title}</h4>
+                    <img
+                      src={proj.imageUrl}
+                      alt={proj.title}
+                      className="w-full h-48 object-cover rounded my-2"
+                    />
+                    <p className="text-gray-700">{proj.description}</p>
+                    <p className="text-green-600 font-semibold">KES {proj.price}</p>
                   </li>
                 ))}
               </ul>

@@ -1,78 +1,42 @@
-import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
 import Navbar from "../Components/Shared/Navbar";
 
 const Checkout = () => {
   const location = useLocation();
-  const [project, setProject] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const params = new URLSearchParams(location.search);
+  const projectId = params.get("id");
 
-  const queryParams = new URLSearchParams(location.search);
-  const projectId = queryParams.get("id");
+  const allProjects = JSON.parse(localStorage.getItem("allProjects")) || [];
+  const project = allProjects.find((p) => p.id === projectId);
 
-  useEffect(() => {
-    const fetchProject = async () => {
-      try {
-        const docRef = doc(db, "userProjects", projectId);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          setProject({ id: docSnap.id, ...docSnap.data() });
-        } else {
-          console.log("Project not found.");
-        }
-      } catch (err) {
-        console.error("Error fetching project:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (projectId) {
-      fetchProject();
-    } else {
-      setLoading(false);
-    }
-  }, [projectId]);
-
-  const handleWhatsAppOrder = () => {
-    const phoneNumber = "254706867627"; // Change to your WhatsApp number
-    const message = `Hello, I’d like to buy the project "${project.title}" for KES ${project.price}. Is it available?`;
-    const encoded = encodeURIComponent(message);
-    const url = `https://wa.me/${phoneNumber}?text=${encoded}`;
-    window.open(url, "_blank");
-  };
+  if (!project) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+          <h2 className="text-xl text-red-500">Project not found</h2>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gray-100 p-6 flex justify-center items-center">
-        <div className="bg-white p-6 rounded shadow w-full max-w-lg">
-          {loading ? (
-            <p>Loading project...</p>
-          ) : !project ? (
-            <p className="text-red-600">Project not found.</p>
-          ) : (
-            <>
-              <h2 className="text-2xl font-bold mb-4">{project.title}</h2>
-              <img
-                src={project.imageUrl}
-                alt={project.title}
-                className="w-full h-64 object-cover rounded mb-4"
-              />
-              <p className="mb-2">{project.description}</p>
-              <p className="font-semibold text-green-700 mb-4">Price: KES {project.price}</p>
+      <div className="min-h-screen bg-gray-100 p-6 flex justify-center">
+        <div className="max-w-xl w-full bg-white shadow rounded p-6">
+          <img
+            src={project.imageUrl}
+            alt={project.title}
+            className="w-full h-60 object-cover rounded mb-4"
+          />
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">{project.title}</h1>
+          <p className="text-gray-600 mb-4">{project.description}</p>
+          <p className="text-lg font-semibold text-green-600 mb-6">KES {project.price}</p>
 
-              <button
-                onClick={handleWhatsAppOrder}
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-              >
-                Order via WhatsApp
-              </button>
-            </>
-          )}
+          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Pay with M-Pesa
+          </button>
         </div>
       </div>
     </>

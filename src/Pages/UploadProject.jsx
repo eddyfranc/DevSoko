@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../Components/Shared/Navbar";
 import UploadForm from "../Components/Project/UploadForm";
 import useUserRole from "../hooks/useUserRole";
 import { auth } from "../firebase";
@@ -24,7 +23,6 @@ const UploadProject = () => {
 
   return (
     <>
-      <Navbar />
       <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
         <UploadForm />
       </div>

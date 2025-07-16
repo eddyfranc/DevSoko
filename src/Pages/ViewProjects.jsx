@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase";
 import ProjectCard from "../Components/Project/ProjectCard";
-import Navbar from "../Components/Shared/Navbar";
 
 const ViewProjects = () => {
   const [projects, setProjects] = useState([]);
@@ -20,7 +19,6 @@ const ViewProjects = () => {
 
   return (
     <>
-      <Navbar />
       <div className="min-h-screen bg-gray-100 p-6">
         <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">Available Projects</h2>
         <div className="flex flex-wrap justify-center gap-6">

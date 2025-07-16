@@ -1,10 +1,7 @@
 import { Link } from "react-router-dom";
-import Navbar from "../Components/Shared/Navbar";
-
 const Home = () => {
   return (
     <>
-      <Navbar />
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-6 py-12 text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold text-blue-600 mb-4">
           Welcome to DevSoko

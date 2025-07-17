@@ -12,8 +12,8 @@ app.use(express.json());
 // ✅ Safaricom Daraja credentials
 const consumerKey = 'SLamhyK1LdXSFGIJgkuCbnS7mqEil5SUcV29KHz6NfyoRYKh';
 const consumerSecret = 'RpNkWanwU4XWFYbGEvdE1qtnW3wZpjv1nU4SU4zYgOhMGM0XWrApU4tzSc3qKnSo';
-const shortcode = '174379'; // 🔴 Replace once available (e.g. 174379)
-const passkey = 'iHuyjnlWSJLmVt54hltaQIchnjNdI2KImwWAZXUqNufDAsCw1OVRPawon8jh5VwRdaJIFbdd341WYu35zUlBpoqIpHOipWHBifsZ04CJ4Q05+BGGfUk3qdSL/5xrDaL9+CE1oCXzXNQyq1zENkFlcX3geHJtoPnOuezav90tjNKHWNhpWjFL8slBRW21HD83CbPaVZSBGZIjmxDW/XzbVCjM0MuWv8BjYLFaJEjvUrcPd3vvRRZ4AiDj8A8CJxd1zVIu+Mb9wsmRNBvlebyoInyY2PfX74SEavj/uJrY7tiFzo184TKB1ivhB26fGPVFzcp84Yh3Gtb7APY1O2J9dQ==';     // 🔴 Replace once available
+const shortcode = 'N/A'; // 🔴 Replace once available (e.g. 174379)
+const passkey = 'Xl0S0MVEQqnNybF2JEONQsfe2SW/YcclO9fnf5ehyr4CE2Pc9FW7+Qpgoc7rOxD0yxFgoCJxj4F6/LE3b6L6LX16IT7xDGYYN8juymIhB32xb+t7eQVHn1XG8lEYHOJLOw2M6TZHb+8vVx5GSCB6ryYYtEtt1dGxLK4vGjjRvmam2a2GwBKY0g+BedooF3Afgc/Sp41ZkK79zgk45+23q8EN52iB+0tOkWm7vGINLYynEa6bmKdASTjP4Mn4R4D+ahwWbsPmv1Y6PerxDQGmmbMjDuBMbzjy9dyQ72kKEiKGU1NPUi3hhygJLYWB28kKuIv9nifjc2v9Ttg7iyNN+A==';     // 🔴 Replace once available
 
 const auth_url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
 const stkPushURL = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';

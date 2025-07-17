@@ -12,10 +12,10 @@ const Checkout = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:4000/stk-push", {
-        phone,
-        amount,
-      });
+      const res = await axios.post("/api/stk-push", {
+  phone: "2547XXXXXXX", // Make sure it's in correct format
+  amount: 100
+});
 
       alert("✅ STK Push Sent! Check your phone to complete payment.");
       console.log("Payment response:", res.data);

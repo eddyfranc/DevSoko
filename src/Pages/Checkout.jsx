@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import axios from "axios";
 import Navbar from "../Components/Shared/Navbar";
 
 const Checkout = () => {
@@ -7,44 +8,38 @@ const Checkout = () => {
   const params = new URLSearchParams(location.search);
   const projectId = params.get("id");
 
-  const [project, setProject] = useState(null);
   const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    const allProjects = JSON.parse(localStorage.getItem("allProjects")) || [];
-    const foundProject = allProjects.find((p) => p.id === projectId);
-    setProject(foundProject);
-  }, [projectId]);
+  const allProjects = JSON.parse(localStorage.getItem("allProjects")) || [];
+  const project = allProjects.find((p) => p.id === projectId);
 
-  const handlePay = async () => {
-    if (!phone || phone.length !== 12 || !phone.startsWith("254")) {
-      alert("Enter valid Safaricom number e.g., 2547XXXXXXX");
+  const handlePayment = async () => {
+    if (!phone.startsWith("254")) {
+      setMessage("Enter phone in format 2547xxxxxxxx");
       return;
     }
 
+    setLoading(true);
+    setMessage("");
+
     try {
-      const res = await fetch("http://localhost:3000/stk-push", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phone: phone,
-          amount: project?.price || 1,
-        }),
+      const res = await axios.post("http://localhost:3000/stk-push", {
+        phone,
+        amount: project.price || 1,
       });
 
-      const data = await res.json();
-      if (data.ResponseCode === "0") {
-        alert("M-Pesa Prompt Sent! Confirm payment on your phone.");
+      if (res.data.ResponseCode === "0") {
+        setMessage("Payment prompt sent to your phone. Please complete the payment.");
       } else {
-        alert("M-Pesa payment failed. Try again.");
-        console.error("Payment Error:", data);
+        setMessage("Failed to initiate payment.");
       }
     } catch (err) {
-      console.error("Network Error:", err);
-      alert("Network error. Make sure backend is running.");
+      setMessage("Error: " + (err.response?.data?.error || "Something went wrong"));
     }
+
+    setLoading(false);
   };
 
   if (!project) {
@@ -72,21 +67,25 @@ const Checkout = () => {
           <p className="text-gray-600 mb-4">{project.description}</p>
           <p className="text-lg font-semibold text-green-600 mb-6">KES {project.price}</p>
 
-          <label className="block text-sm font-medium mb-1">Safaricom Phone Number</label>
           <input
-            type="tel"
-            className="border rounded px-3 py-2 w-full mb-4"
-            placeholder="e.g. 254712345678"
+            type="text"
+            placeholder="Enter phone (e.g. 254712345678)"
+            className="w-full border p-2 mb-4 rounded"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
 
           <button
-            onClick={handlePay}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            onClick={handlePayment}
+            disabled={loading}
           >
-            Pay with M-Pesa
+            {loading ? "Processing..." : "Pay with M-Pesa"}
           </button>
+
+          {message && (
+            <p className="mt-4 text-center text-sm text-gray-700">{message}</p>
+          )}
         </div>
       </div>
     </>

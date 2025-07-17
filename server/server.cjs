@@ -1,8 +1,10 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors'); // <-- Hii ndo ilikuwa missing
 require('dotenv').config();
 
 const app = express();
+app.use(cors()); // <-- Enable CORS
 app.use(express.json());
 
 const { CONSUMER_KEY, CONSUMER_SECRET, BUSINESS_SHORTCODE, PASSKEY } = process.env;
@@ -48,7 +50,7 @@ app.post('/stk-push', async (req, res) => {
       PartyA: req.body.phone,
       PartyB: BUSINESS_SHORTCODE,
       PhoneNumber: req.body.phone,
-      CallBackURL: 'https://mydomain.com/callback', // You can use ngrok
+      CallBackURL: 'https://mydomain.com/callback', // You can replace with Ngrok URL
       AccountReference: 'DevSoko',
       TransactionDesc: 'Payment for project'
     };
@@ -66,6 +68,10 @@ app.post('/stk-push', async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.send("M-Pesa API Backend is running");
+});
+
 app.listen(3000, () => {
-  console.log('Server running on http://localhost:3000');
+  console.log('✅ Server running on http://localhost:3000');
 });

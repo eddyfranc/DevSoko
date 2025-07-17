@@ -1,77 +1,71 @@
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors'); // <-- Hii ndo ilikuwa missing
-require('dotenv').config();
+const cors = require('cors');
+const moment = require('moment');
 
 const app = express();
-app.use(cors()); // <-- Enable CORS
+const port = 4000;
+
+app.use(cors());
 app.use(express.json());
 
-const { CONSUMER_KEY, CONSUMER_SECRET, BUSINESS_SHORTCODE, PASSKEY } = process.env;
+// ✅ Safaricom Daraja credentials
+const consumerKey = 'SLamhyK1LdXSFGIJgkuCbnS7mqEil5SUcV29KHz6NfyoRYKh';
+const consumerSecret = 'RpNkWanwU4XWFYbGEvdE1qtnW3wZpjv1nU4SU4zYgOhMGM0XWrApU4tzSc3qKnSo';
+const shortcode = '174379'; // 🔴 Replace once available (e.g. 174379)
+const passkey = 'iHuyjnlWSJLmVt54hltaQIchnjNdI2KImwWAZXUqNufDAsCw1OVRPawon8jh5VwRdaJIFbdd341WYu35zUlBpoqIpHOipWHBifsZ04CJ4Q05+BGGfUk3qdSL/5xrDaL9+CE1oCXzXNQyq1zENkFlcX3geHJtoPnOuezav90tjNKHWNhpWjFL8slBRW21HD83CbPaVZSBGZIjmxDW/XzbVCjM0MuWv8BjYLFaJEjvUrcPd3vvRRZ4AiDj8A8CJxd1zVIu+Mb9wsmRNBvlebyoInyY2PfX74SEavj/uJrY7tiFzo184TKB1ivhB26fGPVFzcp84Yh3Gtb7APY1O2J9dQ==';     // 🔴 Replace once available
 
-const baseURL = 'https://sandbox.safaricom.co.ke';
-
-const getAccessToken = async () => {
-  const auth = Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString('base64');
-
-  const res = await axios.get(`${baseURL}/oauth/v1/generate?grant_type=client_credentials`, {
-    headers: {
-      Authorization: `Basic ${auth}`
-    }
-  });
-
-  return res.data.access_token;
-};
-
-const generateTimestamp = () => {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = (`0${date.getMonth() + 1}`).slice(-2);
-  const day = (`0${date.getDate()}`).slice(-2);
-  const hour = (`0${date.getHours()}`).slice(-2);
-  const minute = (`0${date.getMinutes()}`).slice(-2);
-  const second = (`0${date.getSeconds()}`).slice(-2);
-  return `${year}${month}${day}${hour}${minute}${second}`;
-};
+const auth_url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+const stkPushURL = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
 
 app.post('/stk-push', async (req, res) => {
   try {
-    const accessToken = await getAccessToken();
-    const timestamp = generateTimestamp();
+    const { phone, amount } = req.body;
 
-    const password = Buffer.from(`${BUSINESS_SHORTCODE}${PASSKEY}${timestamp}`).toString('base64');
-
-    const stkData = {
-      BusinessShortCode: BUSINESS_SHORTCODE,
-      Password: password,
-      Timestamp: timestamp,
-      TransactionType: 'CustomerPayBillOnline',
-      Amount: req.body.amount || 1,
-      PartyA: req.body.phone,
-      PartyB: BUSINESS_SHORTCODE,
-      PhoneNumber: req.body.phone,
-      CallBackURL: 'https://mydomain.com/callback', // You can replace with Ngrok URL
-      AccountReference: 'DevSoko',
-      TransactionDesc: 'Payment for project'
-    };
-
-    const response = await axios.post(`${baseURL}/mpesa/stkpush/v1/processrequest`, stkData, {
+    // Step 1: Get Access Token
+    const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64');
+    const { data: authData } = await axios.get(auth_url, {
       headers: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Basic ${auth}`
       }
     });
 
-    res.json(response.data);
+    const access_token = authData.access_token;
+
+    // Step 2: Initiate STK Push
+    const timestamp = moment().format('YYYYMMDDHHmmss');
+    const password = Buffer.from(`${shortcode}${passkey}${timestamp}`).toString('base64');
+
+    const payload = {
+      BusinessShortCode: shortcode,
+      Password: password,
+      Timestamp: timestamp,
+      TransactionType: "CustomerPayBillOnline",
+      Amount: amount,
+      PartyA: phone,
+      PartyB: shortcode,
+      PhoneNumber: phone,
+      CallBackURL: "https://mydomain.com/callback", // You can dummy this
+      AccountReference: "DevSoko",
+      TransactionDesc: "Project Payment"
+    };
+
+    const { data: stkResponse } = await axios.post(stkPushURL, payload, {
+      headers: {
+        Authorization: `Bearer ${access_token}`
+      }
+    });
+
+    res.status(200).json({ message: 'STK push sent', data: stkResponse });
+
   } catch (error) {
-    console.error('STK Error:', error?.response?.data || error.message);
-    res.status(500).json({ error: 'STK Push failed' });
+    console.error('STK Push Error:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Something went wrong', details: error.response?.data || error.message });
   }
+ 
+
 });
 
-app.get("/", (req, res) => {
-  res.send("M-Pesa API Backend is running");
-});
-
-app.listen(3000, () => {
-  console.log('✅ Server running on http://localhost:3000');
+app.listen(port, () => {
+  console.log(`🚀 M-Pesa API Backend running on http://localhost:${port}`);
 });

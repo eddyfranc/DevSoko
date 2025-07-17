@@ -1,94 +1,59 @@
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import Navbar from "../Components/Shared/Navbar";
 
 const Checkout = () => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const projectId = params.get("id");
-
   const [phone, setPhone] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const allProjects = JSON.parse(localStorage.getItem("allProjects")) || [];
-  const project = allProjects.find((p) => p.id === projectId);
+  const [amount, setAmount] = useState(10); // you can make this dynamic
 
   const handlePayment = async () => {
-    if (!phone.startsWith("254")) {
-      setMessage("Enter phone in format 2547xxxxxxxx");
+    if (!phone || phone.length !== 12 || !phone.startsWith("254")) {
+      alert("Please enter a valid Safaricom phone number in the format 2547XXXXXXXX");
       return;
     }
 
-    setLoading(true);
-    setMessage("");
-
     try {
-      const res = await axios.post("http://localhost:3000/stk-push", {
+      const res = await axios.post("http://localhost:4000/stk-push", {
         phone,
-        amount: project.price || 1,
+        amount,
       });
 
-      if (res.data.ResponseCode === "0") {
-        setMessage("Payment prompt sent to your phone. Please complete the payment.");
-      } else {
-        setMessage("Failed to initiate payment.");
-      }
+      alert("✅ STK Push Sent! Check your phone to complete payment.");
+      console.log("Payment response:", res.data);
     } catch (err) {
-      setMessage("Error: " + (err.response?.data?.error || "Something went wrong"));
+      console.error("❌ Payment error:", err);
+      alert("Something went wrong during payment. Try again.");
     }
-
-    setLoading(false);
   };
 
-  if (!project) {
-    return (
-      <>
-        <Navbar />
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
-          <h2 className="text-xl text-red-500">Project not found</h2>
-        </div>
-      </>
-    );
-  }
-
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen bg-gray-100 p-6 flex justify-center">
-        <div className="max-w-xl w-full bg-white shadow rounded p-6">
-          <img
-            src={project.imageUrl}
-            alt={project.title}
-            className="w-full h-60 object-cover rounded mb-4"
-          />
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">{project.title}</h1>
-          <p className="text-gray-600 mb-4">{project.description}</p>
-          <p className="text-lg font-semibold text-green-600 mb-6">KES {project.price}</p>
+    <div className="max-w-md mx-auto mt-10 bg-white shadow-xl rounded-xl p-6">
+      <h2 className="text-2xl font-bold mb-4 text-center">DevSoko Checkout</h2>
 
-          <input
-            type="text"
-            placeholder="Enter phone (e.g. 254712345678)"
-            className="w-full border p-2 mb-4 rounded"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
+      <label className="block mb-2 font-medium text-gray-700">Phone Number (Format: 2547XXXXXXXX)</label>
+      <input
+        type="text"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        placeholder="254712345678"
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
 
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-            onClick={handlePayment}
-            disabled={loading}
-          >
-            {loading ? "Processing..." : "Pay with M-Pesa"}
-          </button>
+      <label className="block mb-2 font-medium text-gray-700">Amount</label>
+      <input
+        type="number"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+        placeholder="Enter amount"
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
 
-          {message && (
-            <p className="mt-4 text-center text-sm text-gray-700">{message}</p>
-          )}
-        </div>
-      </div>
-    </>
+      <button
+        onClick={handlePayment}
+        className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Pay with M-Pesa
+      </button>
+    </div>
   );
 };
 

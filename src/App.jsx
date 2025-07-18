@@ -7,7 +7,8 @@ import UploadProject from "./Pages/UploadProject";
 import ViewProjects from "./Pages/ViewProjects";
 import Dashboard from "./Pages/Dashboard";
 import Checkout from "./Pages/Checkout";
-import ScrollToTop from "./Pages/ScrollToTop";  
+import ScrollToTop from "./Pages/ScrollToTop"; 
+import NotFound from "./Pages/NotFound"; 
 
 function App() {
   return (
@@ -22,7 +23,8 @@ function App() {
           <Route path="/projects" element={<ViewProjects />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+          <Route path="*" element={<NotFound/>} />
+
         </Routes>
      
     </>

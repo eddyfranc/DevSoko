@@ -7,6 +7,7 @@ import UploadProject from "./Pages/UploadProject";
 import ViewProjects from "./Pages/ViewProjects";
 import Dashboard from "./Pages/Dashboard";
 import Checkout from "./Pages/Checkout";
+import ProjectDetails from "./Pages/ProjectDetails";
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
         <Route path="/projects" element={<ViewProjects />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/project/:id" element={<ProjectDetails />} />
+
       </Routes>
     </>
   );

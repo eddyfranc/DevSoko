@@ -5,6 +5,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import UploadForm from "../Components/Project/UploadForm";
 
+// ... (imports remain the same)
+
 const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState("");
@@ -97,6 +99,8 @@ const Dashboard = () => {
 
     // Buyer View
     const allProjects = JSON.parse(localStorage.getItem("allProjects")) || [];
+    const purchases = JSON.parse(localStorage.getItem("purchases")) || [];
+
     return (
       <div>
         <h3 className="text-xl font-semibold mb-4 text-blue-600">Browse Projects</h3>
@@ -104,27 +108,44 @@ const Dashboard = () => {
           <p className="text-gray-500">No projects available.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {allProjects.map((proj) => (
-              <div
-                key={proj.id}
-                className="bg-white rounded shadow p-4 border border-gray-200"
-              >
-                <img
-                  src={proj.imageUrl}
-                  alt={proj.title}
-                  className="w-full h-48 object-cover rounded mb-3"
-                />
-                <h2 className="text-lg font-semibold text-gray-800">{proj.title}</h2>
-                <p className="text-sm text-gray-600 mb-2">{proj.description?.slice(0, 100)}...</p>
-                <p className="font-bold text-green-600 mb-3">KES {proj.price}</p>
-                <button
-                  onClick={() => navigate(`/checkout?id=${proj.id}`)}
-                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            {allProjects.map((proj) => {
+              const purchased = purchases.find(
+                (p) => p.projectId === proj.id && p.buyerEmail === user.email
+              );
+
+              return (
+                <div
+                  key={proj.id}
+                  className="bg-white rounded shadow p-4 border border-gray-200"
                 >
-                  Buy Now
-                </button>
-              </div>
-            ))}
+                  <img
+                    src={proj.imageUrl}
+                    alt={proj.title}
+                    className="w-full h-48 object-cover rounded mb-3"
+                  />
+                  <h2 className="text-lg font-semibold text-gray-800">{proj.title}</h2>
+                  <p className="text-sm text-gray-600 mb-2">{proj.description?.slice(0, 100)}...</p>
+                  <p className="font-bold text-green-600 mb-3">KES {proj.price}</p>
+
+                  {purchased ? (
+                    <a
+                      href={purchased.downloadUrl}
+                      download
+                      className="block bg-green-600 text-white text-center px-4 py-2 rounded hover:bg-green-700"
+                    >
+                      Download Project
+                    </a>
+                  ) : (
+                    <button
+                      onClick={() => navigate(`/checkout?id=${proj.id}`)}
+                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    >
+                      Buy Now
+                    </button>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

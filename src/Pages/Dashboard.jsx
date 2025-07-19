@@ -4,8 +4,8 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import UploadForm from "../Components/Project/UploadForm";
+import Sales from "../Pages/Sales";
 
-// ... (imports remain the same)
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -80,13 +80,32 @@ const Dashboard = () => {
               )}
             </div>
           );
-        case "sales":
-          return (
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Sales</h3>
-              <p className="text-gray-600">Sales stats and reports coming soon!</p>
-            </div>
-          );
+       case "sales":
+  const purchases = JSON.parse(localStorage.getItem("purchases")) || [];
+  const mySales = purchases.filter((p) => p.sellerEmail === user.email);
+
+  return (
+    <div className="p-4">
+      <h3 className="text-xl font-semibold mb-4">Your Sales</h3>
+      {mySales.length === 0 ? (
+        <p className="text-gray-500">No sales yet.</p>
+      ) : (
+        <ul className="space-y-3">
+          {mySales.map((sale, idx) => (
+            <li key={idx} className="border p-4 rounded bg-white shadow">
+              <p className="font-semibold">Project ID: {sale.projectId}</p>
+              <p className="text-sm text-gray-600">Bought by: {sale.buyerEmail}</p>
+              <p className="text-sm text-gray-600">Amount: KES {sale.price}</p>
+              <p className="text-sm text-gray-500">
+                Date: {new Date(sale.timestamp).toLocaleString()}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+
         default:
           return (
             <div>

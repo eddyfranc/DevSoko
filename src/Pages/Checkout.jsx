@@ -25,6 +25,25 @@ const Checkout = () => {
     }
   };
 
+
+  // In your Checkout.jsx (after successful "payment")
+const saveSale = () => {
+  const sales = JSON.parse(localStorage.getItem('sales')) || [];
+
+  const newSale = {
+    projectId: project.id,
+    projectTitle: project.title,
+    buyerEmail: currentUser.email,
+    sellerEmail: project.sellerEmail,
+    date: new Date().toLocaleString(),
+    amount: project.price
+  };
+
+  sales.push(newSale);
+  localStorage.setItem('sales', JSON.stringify(sales));
+};
+
+  
   return (
     <div className="max-w-md mx-auto mt-10 bg-white shadow-xl rounded-xl p-6">
       <h2 className="text-2xl font-bold mb-4 text-center">DevSoko Checkout</h2>

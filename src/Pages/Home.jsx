@@ -36,19 +36,19 @@ const Home = () => {
             <div className="bg-white p-4 shadow rounded">
               <h3 className="text-lg font-semibold text-blue-500 mb-2">For Developers</h3>
               <p className="text-gray-600 text-sm">
-                Earn money by uploading class projects, freelance work, or side apps.
+                Got projects or side apps? Upload, chill, and let the cash roll in.
               </p>
             </div>
             <div className="bg-white p-4 shadow rounded">
               <h3 className="text-lg font-semibold text-blue-500 mb-2">For Buyers</h3>
               <p className="text-gray-600 text-sm">
-                Quickly find affordable and ready-to-use tech solutions.
+                Need a quick fix? Grab smart, ready-to-run tech without breaking a sweat.
               </p>
             </div>
             <div className="bg-white p-4 shadow rounded">
               <h3 className="text-lg font-semibold text-blue-500 mb-2">Secure Payments</h3>
               <p className="text-gray-600 text-sm">
-                All payments are processed via M-Pesa for fast, safe transactions.
+                Fast, smooth, and stress-free checkouts — built for devs, loved by users.
               </p>
             </div>
           </div>

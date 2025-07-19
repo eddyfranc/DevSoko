@@ -11,8 +11,8 @@ const Home = () => {
         </h1>
 
         <p className="text-gray-700 text-lg md:text-xl max-w-xl mb-6">
-          DevSoko is a marketplace where developers can upload and sell their software projects,
-          while buyers explore and purchase useful digital solutions — all powered by M-Pesa.
+         DevSoko: Built by devs, for dreamers. Upload your code, find your tribe, and turn passion into pay.
+         Code it. Sell it. Flex it. A digital shop where devs win and buyers grin.
         </p>
 
         <div className="space-x-4">

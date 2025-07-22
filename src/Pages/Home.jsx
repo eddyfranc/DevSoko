@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../Components/Shared/Navbar";
+import background1 from "../assets/background1.webp";
+import background2 from "../assets/background2.webp";    
+import background3 from "../assets/Background3.jpg";
+import background4 from "../assets/background4.webp";
 
 const Home = () => {
   const backgroundImages = [background1, background2, background3, background4];
@@ -18,15 +21,15 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-6 py-12 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-blue-600 mb-4">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-6 py-12 pt-30 text-center">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-blue-600 mb-4 pt-24">
           Welcome to DevSoko
         </h1>
         <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto">
-          DevSoko: Built by devs, for dreamers. Upload your code, find your
-          tribe, and turn passion into pay. Code it. Sell it. Flex it. A
-          digital shop where devs win and buyers grin.
+          Built by devs, for dreamers. 
+          <br/>Upload your code, find your tribe, and turn passion into pay.<br/> 
+          <span className="text-blue-500 semibold">Code It, Sell It, Flex It</span>. A
+          digital marketplace where devs win and buyers grin.
         </p>
         <div className="flex space-x-4">
           <Link
@@ -50,7 +53,7 @@ const Home = () => {
           Why DevSoko?
         </h2>
         <div className="flex flex-wrap justify-center gap-6 px-4">
-          <div className="bg-white p-6 rounded shadow-md w-72">
+          <div className="bg-white p-6 rounded shadow-md w-72 transform transition-transform duration-200 hover:scale-105">
             <h3 className="text-lg font-semibold text-blue-600 mb-2">
               For Developers
             </h3>
@@ -58,7 +61,7 @@ const Home = () => {
               Got projects or side apps? Upload, chill, and let the cash roll in.
             </p>
           </div>
-          <div className="bg-white p-6 rounded shadow-md w-72">
+          <div className="bg-white p-6 rounded shadow-md w-72 transform transition-transform duration-200 hover:scale-105">
             <h3 className="text-lg font-semibold text-blue-600 mb-2">
               For Buyers
             </h3>
@@ -66,7 +69,7 @@ const Home = () => {
               Need a quick fix? Grab smart, ready-to-run tech without breaking a sweat.
             </p>
           </div>
-          <div className="bg-white p-6 rounded shadow-md w-72">
+          <div className="bg-white p-6 rounded shadow-md w-72 transform transition-transform duration-200 hover:scale-105">
             <h3 className="text-lg font-semibold text-blue-600 mb-2">
               Secure Payments
             </h3>

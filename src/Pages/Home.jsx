@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../Components/Shared/Navbar";
+
 import background1 from "../assets/background1.webp";
 import background2 from "../assets/background2.webp";
 import background3 from "../assets/background3.jpg";
@@ -15,7 +16,7 @@ const Home = () => {
       setCurrentImageIndex((prevIndex) =>
         (prevIndex + 1) % backgroundImages.length
       );
-    }, 4000); 
+    }, 4000);
 
     return () => clearInterval(interval);
   }, []);
@@ -38,7 +39,7 @@ const Home = () => {
         <Navbar />
       </div>
 
-      {/* Content */}
+      {/* Hero Section */}
       <div className="relative z-20 flex flex-col items-center justify-center text-white text-center min-h-screen px-4">
         <h1 className="text-4xl md:text-6xl font-bold mb-6 mt-16 text-blue-500">
           Welcome to DevSoko
@@ -75,7 +76,7 @@ const Home = () => {
               For Developers
             </h3>
             <p className="text-gray-700">
-             Got projects or side apps? Upload, chill, and let the cash roll in.
+              Got projects or side apps? Upload, chill, and let the cash roll in.
             </p>
           </div>
           <div className="bg-white p-6 rounded shadow-md w-72">

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../Components/Shared/Navbar";
+
 
 const ViewProjects = () => {
   const [projects, setProjects] = useState([]);
@@ -18,7 +18,7 @@ const ViewProjects = () => {
 
   return (
     <>
-      <Navbar />
+    
       <div className="min-h-screen bg-gray-100 p-6">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold text-center text-blue-700 mb-6">

@@ -15,7 +15,7 @@ const Home = () => {
       setCurrentImageIndex((prevIndex) =>
         (prevIndex + 1) % backgroundImages.length
       );
-    }, 4000); // 4 seconds
+    }, 4000); 
 
     return () => clearInterval(interval);
   }, []);

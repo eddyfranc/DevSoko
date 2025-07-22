@@ -1,12 +1,72 @@
-# React + Vite
+# 🚀 DevSoko - Your Digital Marketplace for Developers
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to **DevSoko**, a web platform designed to connect developers with digital buyers and collaborators. Whether you're offering code-based services or digital products, DevSoko gives you the tools to showcase, sell, and manage your work efficiently.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📌 Table of Contents
 
-## Expanding the ESLint configuration
+- [About the Project](#about-the-project)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Running the App](#running-the-app)
+- [Database Configuration](#database-configuration)
+- [Folder Structure](#folder-structure)
+- [Contributing](#contributing)
+- [License](#license)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 📖 About the Project
+
+**DevSoko** is a developer-centric marketplace designed to:
+- Allow users to create seller or buyer accounts
+- Enable sellers to post digital services or products
+- Allow buyers to browse, search, and purchase from sellers
+- Provide an admin panel for platform moderation and analytics
+
+This project is ideal for students, freelancers, and developers looking for a side hustle or a portfolio booster.
+
+---
+
+## 🌟 Features
+
+- 🧑‍💻 Developer Profile & Portfolio
+- 🛍️ Marketplace Listings for Digital Products
+- 🔍 Search and Filter Functionality
+- 💳 Secure Payments Integration *(Daraja API - Coming Soon)*
+- 🧾 Orders and Invoicing
+- 🧑‍💼 Admin Dashboard for Platform Oversight
+- 📦 Project Uploads with GitHub Link Support
+- 🧠 Recommendation System *(AI/ML Powered - Coming)*
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer       | Technology                        |
+|-------------|------------------------------------|
+| Frontend    | React.js, TailwindCSS              |
+| Backend     | Django / Django Rest Framework     |
+| Database    | PostgreSQL                         |
+| Auth        | Django AllAuth / JWT (TBD)         |
+| Payment     | Daraja API (Safaricom)             |
+| Deployment  | Heroku / Render / Railway (TBD)    |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js & npm
+- Python 3.10+
+- PostgreSQL & pgAdmin
+- Git
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/devsoko.git
+cd devsoko

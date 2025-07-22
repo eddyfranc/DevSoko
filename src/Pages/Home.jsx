@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import background1 from "../assets/background1.webp";
-import background2 from "../assets/background2.webp";    
+import background2 from "../assets/background2.webp";
 import background3 from "../assets/Background3.jpg";
 import background4 from "../assets/background4.webp";
 
@@ -15,20 +15,24 @@ const Home = () => {
         (prevIndex + 1) % backgroundImages.length
       );
     }, 4000);
-
     return () => clearInterval(interval);
   }, []);
 
   return (
     <>
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-6 py-12 pt-30 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-blue-600 mb-4 pt-24">
+      <div
+        className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center px-6 py-12 text-center transition-all duration-1000"
+        style={{ backgroundImage: `url(${backgroundImages[currentImageIndex]})` }}
+      >
+        <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 pt-24 drop-shadow-md">
           Welcome to DevSoko
         </h1>
-        <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto">
-          Built by devs, for dreamers. 
-          <br/>Upload your code, find your tribe, and turn passion into pay.<br/> 
-          <span className="text-blue-500 semibold">Code It, Sell It, Flex It</span>. A
+        <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto text-white drop-shadow-md">
+          Built by devs, for dreamers.
+          <br />
+          Upload your code, find your tribe, and turn passion into pay.
+          <br />
+          <span className="text-blue-300 font-semibold">Code It, Sell It, Flex It</span>. A
           digital marketplace where devs win and buyers grin.
         </p>
         <div className="flex space-x-4">
@@ -47,7 +51,6 @@ const Home = () => {
         </div>
       </div>
 
-      
       <div className="relative z-30 bg-white py-16">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
           Why DevSoko?
@@ -84,3 +87,4 @@ const Home = () => {
 };
 
 export default Home;
+

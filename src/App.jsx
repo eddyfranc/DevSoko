@@ -12,7 +12,7 @@ import ProjectDetails from "./Pages/ProjectDetails";
 function App() {
   return (
     
-      <BrowserRouter>
+      <>
         <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -25,7 +25,8 @@ function App() {
         <Route path="/project/:id" element={<ProjectDetails />} />
 
       </Routes>
-      </BrowserRouter>
+      </>
+     
   );
 }
 

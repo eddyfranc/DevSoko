@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../Components/Shared/Navbar";
+
 
 const Home = () => {
   const backgroundImages = [background1, background2, background3, background4];

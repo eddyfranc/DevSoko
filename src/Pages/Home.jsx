@@ -75,7 +75,7 @@ const Home = () => {
               For Developers
             </h3>
             <p className="text-gray-700">
-             Got class projects or side apps? Upload, chill, and let the cash roll in.
+             Got projects or side apps? Upload, chill, and let the cash roll in.
             </p>
           </div>
           <div className="bg-white p-6 rounded shadow-md w-72">

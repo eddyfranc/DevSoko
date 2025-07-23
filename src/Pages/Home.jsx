@@ -24,7 +24,8 @@ const Home = () => {
         className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center px-6 py-12 text-center transition-all duration-1000"
         style={{ backgroundImage: `url(${backgroundImages[currentImageIndex]})` }}
       >
-        <h1 className="text-4xl md:text-5xl font-extrabold text-burlywood mb-4 pt-24 drop-shadow-md">
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 pt-24 drop-shadow-md"
+          style={{ color: "burlywood" }}>
           Welcome to DevSoko
         </h1>
         <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto text-white drop-shadow-md">
@@ -52,7 +53,8 @@ const Home = () => {
       </div>
 
       <div className="relative z-30 bg-white py-16">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
+        <h2 className="text-3xl font-bold text-center mb-10"
+         style={{ color: "burlywood" }}>
           Why DevSoko?
         </h2>
         <div className="flex flex-wrap justify-center gap-6 px-4">

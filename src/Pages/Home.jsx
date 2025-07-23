@@ -24,7 +24,7 @@ const Home = () => {
         className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center px-6 py-12 text-center transition-all duration-1000"
         style={{ backgroundImage: `url(${backgroundImages[currentImageIndex]})` }}
       >
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 pt-24 drop-shadow-md">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-burlywood mb-4 pt-24 drop-shadow-md">
           Welcome to DevSoko
         </h1>
         <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto text-white drop-shadow-md">

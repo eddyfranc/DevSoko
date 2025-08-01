@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import ConnectBalance from './ConnectBalance';
 import ConnectPackageCard from './ConnectPackageCard';
 
@@ -16,14 +17,18 @@ const ConnectPurchasePage = () => {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto pt-12">
       <ConnectBalance connects={connects} />
 
       <h2 className="mt-6 mb-4 text-2xl font-semibold">Buy Connects</h2>
       <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-        {packages.map((pkg) => (
-          <ConnectPackageCard key={pkg.id} pkg={pkg} onBuy={handleBuy} />
-        ))}
+        {packages && packages.length > 0 ? (
+          packages.map((pkg) => (
+            <ConnectPackageCard key={pkg.id} pkg={pkg} onBuy={handleBuy} />
+          ))
+        ) : (
+          <p>No connect packages available.</p>
+        )}
       </div>
     </div>
   );

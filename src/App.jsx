@@ -8,6 +8,8 @@ import ViewProjects from "./Pages/ViewProjects";
 import Dashboard from "./Pages/Dashboard";
 import Checkout from "./Pages/Checkout";
 import ProjectDetails from "./Pages/ProjectDetails";
+import ConnectPurchasePage from "./Pages/ConnectPurchasePage";
+import ConnectPackageCard from "./Pages/ConnectPackageCard";
 
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/project/:id" element={<ProjectDetails />} />
+        <Route path='/ConnectPurchasePage' element={<ConnectPurchasePage />} />
+        <Route path='/ConnectPackageCard' element={<ConnectPackageCard />} />
 
       </Routes>
       </>

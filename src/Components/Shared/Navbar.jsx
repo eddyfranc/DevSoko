@@ -50,8 +50,8 @@ const Navbar = () => {
         scrolled ? "bg-white shadow-md" : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <Link to="/" className="text-xl font-bold text-blue-600">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center ">   
+        <Link to="/" className="text-3xl font-bold text-blue-600">
           DevSoko
         </Link>
         <div className="space-x-4">
@@ -98,6 +98,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
+
     </nav>
   );
 };

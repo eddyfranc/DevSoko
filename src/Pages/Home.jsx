@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import NewProjectsAvailable from "./NewProjectsAvailable"; 
 import background1 from "../assets/background1.webp";
 import background2 from "../assets/background2.webp";
 import background3 from "../assets/Background3.jpg";
 import background4 from "../assets/background4.webp";
+import Footer from "../Components/Shared/Footer";
 
 const Home = () => {
   const backgroundImages = [background1, background2, background3, background4];
@@ -16,17 +18,18 @@ const Home = () => {
       );
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [backgroundImages.length]);
 
   return (
     <>
       {/* Hero Section */}
       <div
-        className="min-h-screen pt-24 flex flex-col items-center justify-center bg-cover bg-center px-6 text-center transition-all duration-1000"
+        className="min-h-screen pt-24 flex flex-col items-center justify-center bg-cover bg-center px-6 text-center transition-all duration-1000 relative" // Add `relative` here
         style={{
           backgroundImage: `url(${backgroundImages[currentImageIndex]})`,
         }}
       >
+        <NewProjectsAvailable /> 
         <h1
           className="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-md"
           style={{ color: "burlywood" }}
@@ -97,6 +100,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+       <Footer />
     </>
   );
 };

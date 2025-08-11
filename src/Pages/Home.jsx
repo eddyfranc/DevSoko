@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import NewProjectsAvailable from "./NewProjectsAvailable"; 
 import background1 from "../assets/background1.webp";
 import background2 from "../assets/background2.webp";
 import background3 from "../assets/Background3.jpg";
 import background4 from "../assets/background4.webp";
+import Footer from "../Components/Shared/Footer";
 
 const Home = () => {
   const backgroundImages = [background1, background2, background3, background4];
@@ -16,16 +18,22 @@ const Home = () => {
       );
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [backgroundImages.length]);
 
   return (
     <>
+      {/* Hero Section */}
       <div
-        className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center px-6 py-12 text-center transition-all duration-1000"
-        style={{ backgroundImage: `url(${backgroundImages[currentImageIndex]})` }}
+        className="min-h-screen pt-24 flex flex-col items-center justify-center bg-cover bg-center px-6 text-center transition-all duration-1000 relative" // Add `relative` here
+        style={{
+          backgroundImage: `url(${backgroundImages[currentImageIndex]})`,
+        }}
       >
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 pt-24 drop-shadow-md"
-          style={{ color: "burlywood" }}>
+        <NewProjectsAvailable /> 
+        <h1
+          className="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-md"
+          style={{ color: "burlywood" }}
+        >
           Welcome to DevSoko
         </h1>
         <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto text-white drop-shadow-md">
@@ -33,10 +41,12 @@ const Home = () => {
           <br />
           Upload your code, find your tribe, and turn passion into pay.
           <br />
-          <span className="text-blue-300 font-semibold">Code It, Sell It, Flex It</span>. A
-          digital marketplace where devs win and buyers grin.
+          <span className="text-blue-300 font-semibold">
+            Code It, Sell It, Flex It
+          </span>
+          . A digital marketplace where devs win and buyers grin.
         </p>
-        <div className="flex space-x-4">
+        <div className="flex flex-wrap justify-center gap-4">
           <Link
             to="/register"
             className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition"
@@ -52,13 +62,17 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="relative z-30 bg-white py-16">
-        <h2 className="text-3xl font-bold text-center mb-10"
-         style={{ color: "burlywood" }}>
+      {/* Info Section */}
+      <section className="relative z-30 bg-white py-16 px-4">
+        <h2
+          className="text-3xl font-bold text-center mb-10"
+          style={{ color: "burlywood" }}
+        >
           Why DevSoko?
         </h2>
-        <div className="flex flex-wrap justify-center gap-6 px-4">
-          <div className="bg-white p-6 rounded shadow-md w-72 transform transition-transform duration-200 hover:scale-105">
+        <div className="flex flex-wrap justify-center gap-6">
+          {/* Card 1 */}
+          <div className="bg-white p-6 rounded-xl shadow-md w-72 transform transition-transform duration-200 hover:scale-105">
             <h3 className="text-lg font-semibold text-blue-600 mb-2">
               For Developers
             </h3>
@@ -66,7 +80,8 @@ const Home = () => {
               Got projects or side apps? Upload, chill, and let the cash roll in.
             </p>
           </div>
-          <div className="bg-white p-6 rounded shadow-md w-72 transform transition-transform duration-200 hover:scale-105">
+          {/* Card 2 */}
+          <div className="bg-white p-6 rounded-xl shadow-md w-72 transform transition-transform duration-200 hover:scale-105">
             <h3 className="text-lg font-semibold text-blue-600 mb-2">
               For Buyers
             </h3>
@@ -74,7 +89,8 @@ const Home = () => {
               Need a quick fix? Grab smart, ready-to-run tech without breaking a sweat.
             </p>
           </div>
-          <div className="bg-white p-6 rounded shadow-md w-72 transform transition-transform duration-200 hover:scale-105">
+          {/* Card 3 */}
+          <div className="bg-white p-6 rounded-xl shadow-md w-72 transform transition-transform duration-200 hover:scale-105">
             <h3 className="text-lg font-semibold text-blue-600 mb-2">
               Secure Payments
             </h3>
@@ -83,10 +99,10 @@ const Home = () => {
             </p>
           </div>
         </div>
-      </div>
+      </section>
+       <Footer />
     </>
   );
 };
 
 export default Home;
-

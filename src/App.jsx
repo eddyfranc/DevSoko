@@ -10,6 +10,8 @@ import Checkout from "./Pages/Checkout";
 import ProjectDetails from "./Pages/ProjectDetails";
 import ConnectPurchasePage from "./Pages/ConnectPurchasePage";
 import ConnectPackageCard from "./Pages/ConnectPackageCard";
+import AdminLogin from "./Pages/AdminLogin";
+import AdminDashboard from "./Pages/AdminDashboard";
 
 
 function App() {

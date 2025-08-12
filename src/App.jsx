@@ -12,6 +12,7 @@ import ConnectPurchasePage from "./Pages/DevTokensPurchasePage";
 import ConnectPackageCard from "./Pages/DevTokenPackageCard";
 // import AdminLogin from "./Pages/AdminLogin";
 // import AdminDashboard from "./Pages/AdminDashboard";
+import ContactPage from "./Pages/ContactPage";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         <Route path="/project/:id" element={<ProjectDetails />} />
         <Route path='/ConnectPurchasePage' element={<ConnectPurchasePage />} />
         <Route path='/ConnectPackageCard' element={<ConnectPackageCard />} />
+        <Route path='/contactpage' element={<ContactPage/>} />
 
       </Routes>
       </>

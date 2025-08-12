@@ -44,18 +44,18 @@ const Home = () => {
           <span className="text-blue-300 font-semibold">
             Code It, Sell It, Flex It
           </span>
-          . A digital marketplace where devs win and buyers grin.
+
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <Link
             to="/register"
-            className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition"
+            className="bg-blue-800 text-white px-6 py-3 rounded hover:bg-blue-700 transition"
           >
             Get Started
           </Link>
           <Link
             to="/projects"
-            className="bg-white text-blue-600 px-6 py-3 rounded hover:bg-gray-100 transition"
+            className="bg-white text-blue-800 px-6 py-3 rounded hover:bg-gray-100 transition"
           >
             View Projects
           </Link>

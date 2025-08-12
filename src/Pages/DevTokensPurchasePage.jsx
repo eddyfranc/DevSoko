@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import ConnectBalance from './ConnectBalance';
-import ConnectPackageCard from './ConnectPackageCard';
+import DevTokensBalance from './DevTokensBalance';
+import DevTokensPackageCard from './DevTokenPackageCard';
 
-const ConnectPurchasePage = () => {
+const DevTokensPurchasePage = () => {
   const [connects, setConnects] = useState(5); // Default user connects
   const packages = [
     { id: 1, name: 'Starter', connects: 10, price: 100 },
@@ -34,4 +34,4 @@ const ConnectPurchasePage = () => {
   );
 };
 
-export default ConnectPurchasePage;
+export default DevTokensPurchasePage;

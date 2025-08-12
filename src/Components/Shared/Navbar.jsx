@@ -51,16 +51,16 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center ">   
-        <Link to="/" className="text-3xl font-bold text-blue-600">
+        <Link to="/" className="text-3xl font-bold text-blue-800">
           DevSoko
         </Link>
         <div className="space-x-4">
-          <Link to="/projects" className="text-gray-700 hover:text-blue-600">
+          <Link to="/projects" className="text-gray-700 hover:text-blue-700">
             Projects
           </Link>
 
           {role === "seller" && (
-            <Link to="/upload" className="text-gray-700 hover:text-blue-600">
+            <Link to="/upload" className="text-gray-700 hover:text-blue-700">
               Upload
             </Link>
           )}
@@ -69,13 +69,13 @@ const Navbar = () => {
             <>
               <Link
                 to="/login"
-                className="text-gray-700 hover:text-blue-600"
+                className="text-gray-700 hover:text-blue-700"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                className="bg-blue-800 text-white px-3 py-1 rounded hover:bg-blue-700"
               >
                 Register
               </Link>
@@ -84,7 +84,7 @@ const Navbar = () => {
             <>
               <Link
                 to="/dashboard"
-                className="text-gray-700 hover:text-blue-600"
+                className="text-gray-700 hover:text-blue-700"
               >
                 Dashboard
               </Link>

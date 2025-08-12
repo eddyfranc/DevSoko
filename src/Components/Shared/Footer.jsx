@@ -4,7 +4,6 @@ const Footer = () => {
   return (
     <footer className="bg-blue-800 text-white py-12 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Col 1: Branding */}
         <div>
           <Link to="/" className="text-3xl font-bold text-burlywood">
             DevSoko
@@ -14,38 +13,49 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* col 2: Useful Links */}
         <div>
           <h3 className="text-xl font-semibold mb-4">Useful Links</h3>
           <ul className="space-y-2">
             <li>
-              <Link to="/" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <Link
+                to="/"
+                className="text-gray-400 hover:text-white transition-colors duration-200"
+              >
                 Home
               </Link>
             </li>
             <li>
-              <Link to="/projects" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <Link
+                to="/projects"
+                className="text-gray-400 hover:text-white transition-colors duration-200"
+              >
                 Projects
               </Link>
             </li>
             <li>
-              <Link to="/dashboard" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <Link
+                to="/dashboard"
+                className="text-gray-400 hover:text-white transition-colors duration-200"
+              >
                 Dashboard
               </Link>
             </li>
             <li>
-              <Link to="/contact" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <Link
+                to="/contact"
+                className="text-gray-400 hover:text-white transition-colors duration-200"
+              >
                 Contact
               </Link>
             </li>
           </ul>
         </div>
 
-        {/* Column 3: Email Newsletter */}
         <div>
           <h3 className="text-xl font-semibold mb-4">Email Newsletter</h3>
           <p className="text-gray-400 mb-4">
-            Subscribe to our newsletter for monthly updates and new project alerts.
+            Subscribe to our newsletter for monthly updates and new project
+            alerts.
           </p>
           <form className="flex flex-col sm:flex-row gap-2">
             <input
@@ -64,7 +74,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Copyright Section */}
       <div className="mt-12 pt-8 border-t border-gray-700 text-center">
         <p className="text-gray-400 text-sm">
           Copyright ©2025 DevSoko. All rights reserved.

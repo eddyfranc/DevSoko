@@ -10,8 +10,8 @@ import Checkout from "./Pages/Checkout";
 import ProjectDetails from "./Pages/ProjectDetails";
 import ConnectPurchasePage from "./Pages/DevTokensPurchasePage";
 import ConnectPackageCard from "./Pages/DevTokenPackageCard";
-// import AdminLogin from "./Pages/AdminLogin";
-// import AdminDashboard from "./Pages/AdminDashboard";
+import AdminLogin from "./Pages/AdminLogin";
+import AdminDashboard from "./Pages/AdminDashboard";
 import ContactPage from "./Pages/ContactPage";
 
 
@@ -28,8 +28,8 @@ function App() {
         <Route path="/upload" element={<UploadProject />} />
         <Route path="/projects" element={<ViewProjects />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        {/* <Route path="/admin-login" element={<AdminLogin />} /> */}
-        {/* <Route path="/admin-dashboard" element={<AdminDashboard />} /> */}
+        <Route path="/admin-login" element={<AdminLogin />} /> 
+        <Route path="/admin-dashboard" element={<AdminDashboard />} /> 
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/project/:id" element={<ProjectDetails />} />
         <Route path='/ConnectPurchasePage' element={<ConnectPurchasePage />} />

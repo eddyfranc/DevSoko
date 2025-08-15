@@ -10,8 +10,8 @@ import Checkout from "./Pages/Checkout";
 import ProjectDetails from "./Pages/ProjectDetails";
 import ConnectPurchasePage from "./Pages/DevTokensPurchasePage";
 import ConnectPackageCard from "./Pages/DevTokenPackageCard";
-import AdminLogin from "./Pages/AdminLogin";
-import AdminDashboard from "./Pages/AdminDashboard";
+import AdminLogin from "./Components/Admin/AdminLogin";
+import AdminDashboard from "./Components/Admin/AdminDashboard";
 import ContactPage from "./Pages/ContactPage";
 
 

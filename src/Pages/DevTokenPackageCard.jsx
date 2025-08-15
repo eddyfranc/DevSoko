@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ConnectPackageCard = ({ pkg, onBuy }) => {
+const DevTokenPackageCard = ({ pkg, onBuy }) => {
    if (!pkg) return null; // prevent rendering if pkg is undefined
   return (
     <div className="p-4 border rounded-2xl shadow hover:shadow-lg transition-all">
@@ -17,4 +17,4 @@ const ConnectPackageCard = ({ pkg, onBuy }) => {
   );
 };
 
-export default ConnectPackageCard;
+export default DevTokenPackageCard;

@@ -305,7 +305,7 @@ const AdminDashboard = () => {
             </div>
           )}
 
-          {/* USERS (best-effort list pulled from purchases & projects since we’re on localStorage) */}
+          {/* USERS */}
           {tab === "users" && (
             <div className="bg-white rounded shadow p-4">
               <h2 className="text-xl font-semibold mb-4">Users (derived)</h2>

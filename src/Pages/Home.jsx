@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NewProjectsAvailable from "./NewProjectsAvailable"; 
-import background1 from "../assets/background1.webp";
+// import background1 from "../assets/background1.webp";
 import background2 from "../assets/background2.webp";
-import background3 from "../assets/Background3.jpg";
+// import background3 from "../assets/Background3.jpg";
 import background4 from "../assets/background4.webp";
+import background5 from "../assets/background5.png";
 import Footer from "../Components/Shared/Footer";
 
 const Home = () => {
-  const backgroundImages = [background1, background2, background3, background4];
+  const backgroundImages = [ background2, background4, background5];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {

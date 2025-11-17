@@ -16,3 +16,4 @@ class MpesaResponseSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         ret = super().to_representation(instance)
         return ret
+

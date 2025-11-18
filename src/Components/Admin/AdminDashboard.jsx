@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../Components/Shared/Navbar";
+import Navbar from "../Shared/Navbar";
 
 const getAllProjects = () =>
   JSON.parse(localStorage.getItem("allProjects") || "[]");

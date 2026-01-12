@@ -37,11 +37,13 @@ const RegisterForm = () => {
       // Redirect based on role
       if (role === "seller") {
         navigate("/seller-dashboard");
+      } else if (role === "buyer") {
+        navigate("/buyer-dashboard");
       } else {
         navigate("/dashboard");
       }
     } catch (err) {
-      console.error("❌ Registration failed:", err.message);
+      console.error("Registration failed:", err.message);
       setError(err.message);
     } finally {
       setLoading(false);

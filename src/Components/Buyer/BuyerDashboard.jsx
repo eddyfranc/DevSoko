@@ -1,5 +1,9 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { auth, db } from '../../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 // Real-world storage helpers for DevSoko
 const getAllProjects = () => JSON.parse(localStorage.getItem("allProjects") || "[]");
@@ -10,13 +14,54 @@ const BuyerDashboard = ({ user }) => {
   const [projects, setProjects] = useState([]);
   const [myAcquisitions, setMyAcquisitions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentUser, setCurrentUser] = useState(user || { email: '', codeCredits: 100, name: 'Buyer' });
+  const [loading, setLoading] = useState(!user);
+  const navigate = useNavigate();
+
+  // Get user from Firebase if not passed as prop
+  useEffect(() => {
+    if (user) {
+      setCurrentUser(user);
+      setLoading(false);
+      return;
+    }
+
+    const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
+      if (authUser) {
+        // Get user data from Firestore
+        const userDoc = await getDoc(doc(db, "users", authUser.uid));
+        if (userDoc.exists()) {
+          const userData = {
+            email: authUser.email,
+            ...userDoc.data(),
+            codeCredits: userDoc.data().codeCredits || 100,
+            name: userDoc.data().name || authUser.email.split('@')[0]
+          };
+          setCurrentUser(userData);
+        } else {
+          // Fallback if user doc doesn't exist
+          setCurrentUser({
+            email: authUser.email,
+            codeCredits: 100,
+            name: authUser.email.split('@')[0]
+          });
+        }
+        setLoading(false);
+      } else {
+        // User not authenticated, redirect to login
+        navigate('/login');
+      }
+    });
+
+    return () => unsubscribe();
+  }, [user, navigate]);
 
   useEffect(() => {
     const all = getAllProjects();
-    const buys = getPurchases().filter(buy => buy.buyerEmail === user.email);
+    const buys = getPurchases().filter(buy => buy.buyerEmail === currentUser.email);
     setProjects(all);
     setMyAcquisitions(buys);
-  }, [user.email]);
+  }, [currentUser.email]);
 
   const filteredProjects = useMemo(() => {
     return projects.filter(p => 
@@ -30,6 +75,14 @@ const BuyerDashboard = ({ user }) => {
     const assetCount = myAcquisitions.length;
     return { totalSpent, assetCount };
   }, [myAcquisitions]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-slate-500 font-medium">Loading dashboard...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-700">
@@ -182,7 +235,7 @@ const BuyerDashboard = ({ user }) => {
                 <span className="text-indigo-400 text-2xl">⚡</span>
               </div>
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Available Fuel</p>
-              <h3 className="text-4xl font-black">{user.codeCredits} <span className="text-xs font-medium text-slate-500 block uppercase tracking-tighter">CodeCredits</span></h3>
+              <h3 className="text-4xl font-black">{currentUser.codeCredits} <span className="text-xs font-medium text-slate-500 block uppercase tracking-tighter">CodeCredits</span></h3>
             </div>
             <div className="mt-8 pt-8 border-t border-slate-800">
               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Account Status</p>

@@ -16,6 +16,7 @@ import ConnectPackageCard from "./Pages/DevTokenPackageCard";
 import AdminLogin from "./Components/Admin/AdminLogin";
 import AdminDashboard from "./Components/Admin/AdminDashboard";
 import SellerDashboard from "./Components/Seller/SellerDashboard";
+import BuyerDashboard from "./Components/Buyer/BuyerDashboard";
 import ContactPage from "./Pages/ContactPage";
 
 
@@ -32,6 +33,7 @@ function App() {
         <Route path="/upload" element={<UploadProject />} />
         <Route path="/projects" element={<ViewProjects />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
         <Route path="/seller-dashboard" element={<SellerDashboard />} />
         <Route path="/admin-login" element={<AdminLogin />} /> 
         <Route path="/admin-dashboard" element={<AdminDashboard />} /> 

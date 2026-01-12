@@ -23,6 +23,8 @@ const LoginForm = () => {
       // Redirect based on role
       if (userRole === "seller") {
         navigate("/seller-dashboard");
+      } else if (userRole === "buyer") {
+        navigate("/buyer-dashboard");
       } else {
         navigate("/dashboard");
       }

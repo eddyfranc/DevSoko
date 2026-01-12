@@ -34,7 +34,12 @@ const RegisterForm = () => {
       });
 
       console.log("✅ User registered and saved to Firestore.");
-      navigate("/dashboard");
+      // Redirect based on role
+      if (role === "seller") {
+        navigate("/seller-dashboard");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (err) {
       console.error("❌ Registration failed:", err.message);
       setError(err.message);

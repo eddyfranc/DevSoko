@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -12,8 +13,19 @@ const LoginForm = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate("/dashboard");
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Get user role from Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userRole = userDoc.exists() ? userDoc.data().role : "buyer";
+
+      // Redirect based on role
+      if (userRole === "seller") {
+        navigate("/seller-dashboard");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (err) {
       setError("Invalid credentials or user does not exist.");
     }

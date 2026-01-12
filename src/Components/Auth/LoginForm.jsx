@@ -28,7 +28,7 @@ const LoginForm = () => {
       } else {
         navigate("/dashboard");
       }
-    } catch (err) {
+    } catch {
       setError("Invalid credentials or user does not exist.");
     }
   };

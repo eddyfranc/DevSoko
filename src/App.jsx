@@ -1,14 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { auth } from "./firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import Navbar from "./Components/Shared/Navbar";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
 import UploadProject from "./Pages/UploadProject";
 import ViewProjects from "./Pages/ViewProjects";
-import Dashboard from "./Pages/Dashboard";
 import Checkout from "./Pages/Checkout";
 import ProjectDetails from "./Pages/ProjectDetails";
 import ConnectPurchasePage from "./Pages/DevTokensPurchasePage";
@@ -32,7 +28,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/upload" element={<UploadProject />} />
         <Route path="/projects" element={<ViewProjects />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
         <Route path="/seller-dashboard" element={<SellerDashboard />} />
         <Route path="/admin-login" element={<AdminLogin />} /> 

@@ -80,7 +80,7 @@ const Dashboard = () => {
               )}
             </div>
           );
-       case "sales":
+       case "sales": {
   const purchases = JSON.parse(localStorage.getItem("purchases")) || [];
   const mySales = purchases.filter((p) => p.sellerEmail === user.email);
 
@@ -105,7 +105,7 @@ const Dashboard = () => {
       )}
     </div>
   );
-
+       }
         default:
           return (
             <div>

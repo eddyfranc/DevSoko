@@ -1,361 +1,274 @@
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../Shared/Navbar";
 
-const getAllProjects = () =>
-  JSON.parse(localStorage.getItem("allProjects") || "[]");
-const setAllProjects = (arr) =>
-  localStorage.setItem("allProjects", JSON.stringify(arr));
+import React, { useEffect, useMemo, useState } from "react";
 
-const getMyProjects = () =>
-  JSON.parse(localStorage.getItem("myProjects") || "[]");
-const setMyProjects = (arr) =>
-  localStorage.setItem("myProjects", JSON.stringify(arr));
+// Utility functions to interact with your REAL platform data
+const getAllProjects = () => JSON.parse(localStorage.getItem("allProjects") || "[]");
+const setAllProjects = (arr) => localStorage.setItem("allProjects", JSON.stringify(arr));
+const getMyProjects = () => JSON.parse(localStorage.getItem("myProjects") || "[]");
+const setMyProjects = (arr) => localStorage.setItem("myProjects", JSON.stringify(arr));
+const getPurchases = () => JSON.parse(localStorage.getItem("purchases") || "[]");
+const getPaymentBlocks = () => JSON.parse(localStorage.getItem("paymentDisabledFor") || "[]");
+const setPaymentBlocks = (arr) => localStorage.setItem("paymentDisabledFor", JSON.stringify(arr));
 
-const getPurchases = () =>
-  JSON.parse(localStorage.getItem("purchases") || "[]");
-
-const getPaymentBlocks = () =>
-  JSON.parse(localStorage.getItem("paymentDisabledFor") || "[]");
-const setPaymentBlocks = (arr) =>
-  localStorage.setItem("paymentDisabledFor", JSON.stringify(arr));
-
-const AdminDashboard = () => {
-  const navigate = useNavigate();
+/**
+ * AdminDashboard component provides the administrative interface for managing projects,
+ * transactions, and users.
+ */
+const AdminDashboard = ({ user = { name: "Admin" } }) => {
   const [tab, setTab] = useState("overview");
   const [projects, setProjects] = useState([]);
   const [purchases, setPurchases] = useState([]);
   const [search, setSearch] = useState("");
   const [blocked, setBlocked] = useState([]);
 
+  // Load real data from storage on mount
   useEffect(() => {
-    const authed = localStorage.getItem("adminAuthed") === "true";
-    if (!authed) navigate("/admin");
-  }, [navigate]);
+    refreshData();
+    // Sync listener for cross-tab updates (Real-time feel)
+    const handleStorageChange = () => refreshData();
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
-  useEffect(() => {
+  const refreshData = () => {
     setProjects(getAllProjects());
     setPurchases(getPurchases());
     setBlocked(getPaymentBlocks());
-  }, []);
+  };
 
   const filteredProjects = useMemo(() => {
-    if (!search.trim()) return projects;
     const q = search.toLowerCase();
-    return projects.filter(
-      (p) =>
-        String(p.title || "").toLowerCase().includes(q) ||
-        String(p.description || "").toLowerCase().includes(q) ||
-        String(p.ownerEmail || "").toLowerCase().includes(q)
+    return projects.filter(p => 
+      String(p.title || "").toLowerCase().includes(q) ||
+      String(p.ownerEmail || "").toLowerCase().includes(q)
     );
   }, [projects, search]);
 
-  const totals = useMemo(() => {
+  const stats = useMemo(() => {
     const totalOrders = purchases.length;
-    const totalRevenue = purchases.reduce(
-      (sum, p) => sum + Number(p.amount || p.price || 0),
-      0
-    );
-    const uniqueBuyers = new Set(purchases.map((p) => p.buyerEmail)).size;
-    return { totalOrders, totalRevenue, uniqueBuyers };
-  }, [purchases]);
+    const totalRevenue = purchases.reduce((sum, p) => sum + Number(p.amount || p.price || 0), 0);
+    const platformCommission = totalRevenue * 0.15; // Your 15% cut
+    const uniqueUsers = new Set([
+      ...purchases.map(p => p.buyerEmail),
+      ...projects.map(p => p.ownerEmail)
+    ].filter(Boolean)).size;
+
+    return { totalOrders, totalRevenue, platformCommission, uniqueUsers };
+  }, [purchases, projects]);
 
   const handleDeleteProject = (id) => {
-    if (!window.confirm("Delete this project?")) return;
-
-    // remove from allProjects
+    if (!window.confirm("Are you sure? This action is permanent for the developer.")) return;
     const nextAll = getAllProjects().filter((p) => p.id !== id);
     setAllProjects(nextAll);
-    setProjects(nextAll);
-
-    // also try remove from myProjects if it exists
     const nextMine = getMyProjects().filter((p) => p.id !== id);
     setMyProjects(nextMine);
-
-    // (optional) remove purchases for this project
-    // const remainingPurchases = getPurchases().filter(p => p.projectId !== id);
-    // localStorage.setItem("purchases", JSON.stringify(remainingPurchases));
-    // setPurchases(remainingPurchases);
+    setProjects(nextAll);
   };
 
   const toggleBlock = (email) => {
-    const set = new Set(getPaymentBlocks());
-    if (set.has(email)) set.delete(email);
-    else set.add(email);
-    const next = Array.from(set);
+    const currentBlocks = getPaymentBlocks();
+    const isBlocked = currentBlocks.includes(email);
+    const next = isBlocked ? currentBlocks.filter((e) => e !== email) : [...currentBlocks, email];
     setPaymentBlocks(next);
     setBlocked(next);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("adminAuthed");
-    navigate("/admin");
-  };
-
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen bg-gray-100">
-        <div className="max-w-7xl mx-auto p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-            <div className="space-x-2">
-              <button
-                onClick={() => setTab("overview")}
-                className={`px-3 py-1 rounded ${
-                  tab === "overview" ? "bg-blue-600 text-white" : "bg-white"
-                }`}
-              >
-                Overview
-              </button>
-              <button
-                onClick={() => setTab("projects")}
-                className={`px-3 py-1 rounded ${
-                  tab === "projects" ? "bg-blue-600 text-white" : "bg-white"
-                }`}
-              >
-                Projects
-              </button>
-              <button
-                onClick={() => setTab("payments")}
-                className={`px-3 py-1 rounded ${
-                  tab === "payments" ? "bg-blue-600 text-white" : "bg-white"
-                }`}
-              >
-                Payments
-              </button>
-              <button
-                onClick={() => setTab("users")}
-                className={`px-3 py-1 rounded ${
-                  tab === "users" ? "bg-blue-600 text-white" : "bg-white"
-                }`}
-              >
-                Users
-              </button>
-              <button
-                onClick={handleLogout}
-                className="px-3 py-1 rounded bg-red-100 text-red-600"
-              >
-                Admin Logout
-              </button>
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col lg:flex-row">
+      {/* Admin Side Navigation */}
+      <aside className="w-full lg:w-72 bg-slate-900 text-white flex flex-col p-6 shadow-2xl z-20">
+        <div className="mb-10">
+          <h1 className="text-2xl font-bold tracking-tighter">DEV<span className="text-indigo-400">SOKO</span></h1>
+          <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Admin Authority</p>
+        </div>
+
+        <nav className="flex-1 space-y-2">
+          {[
+            { id: 'overview', label: 'Global Insights', icon: '📊' },
+            { id: 'projects', label: 'Project Inventory', icon: '💻' },
+            { id: 'payments', label: 'Transaction Ledger', icon: '💰' },
+            { id: 'users', label: 'User Management', icon: '👥' }
+          ].map(item => (
+            <button
+              key={item.id}
+              onClick={() => setTab(item.id)}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${
+                tab === item.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800'
+              }`}
+            >
+              <span className="text-xl">{item.icon}</span>
+              <span className="font-semibold text-sm">{item.label}</span>
+            </button>
+          ))}
+        </nav>
+
+        <div className="mt-auto pt-6 border-t border-slate-800">
+          <button className="w-full bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white px-4 py-3 rounded-xl text-sm font-bold transition-all">
+            Secure Logout
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <main className="flex-1 p-6 lg:p-10 overflow-y-auto max-h-screen">
+        <header className="flex flex-col md:flex-row md:items-center justify-between mb-10 space-y-4 md:space-y-0">
+          <div>
+            <h2 className="text-3xl font-black text-slate-800 capitalize">{tab} Control</h2>
+            <p className="text-slate-500 font-medium">Monitoring real-time platform activity and data.</p>
+          </div>
+          
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search resources..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none w-64 shadow-sm"
+              />
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+            </div>
+            <div className="h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold border-2 border-white shadow-sm">
+              {user.name.charAt(0)}
             </div>
           </div>
+        </header>
 
-          {/* OVERVIEW */}
-          {tab === "overview" && (
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="bg-white rounded shadow p-4">
-                <p className="text-sm text-gray-500">Total Orders</p>
-                <p className="text-2xl font-bold">{totals.totalOrders}</p>
+        {/* Dynamic Tab Rendering */}
+        {tab === "overview" && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { label: 'Total Revenue', value: `KES ${stats.totalRevenue.toLocaleString()}`, color: 'text-slate-800', bg: 'bg-white' },
+                { label: 'Platform Profit (15%)', value: `KES ${stats.platformCommission.toLocaleString()}`, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+                { label: 'Active Users', value: stats.uniqueUsers, color: 'text-slate-800', bg: 'bg-white' },
+                { label: 'Total Orders', value: stats.totalOrders, color: 'text-slate-800', bg: 'bg-white' },
+              ].map((card, i) => (
+                <div key={i} className={`${card.bg} p-6 rounded-3xl border border-slate-200 shadow-sm`}>
+                  <p className="text-[10px] uppercase font-black tracking-widest text-slate-400 mb-2">{card.label}</p>
+                  <h3 className={`text-2xl font-black ${card.color}`}>{card.value}</h3>
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-white rounded-[2rem] border border-slate-200 p-8 shadow-sm">
+              <h4 className="text-xl font-bold text-slate-800 mb-6">Platform Activity Trends</h4>
+              <div className="h-64 flex items-end space-x-2">
+                 {/* Visual Mock for Data Trend */}
+                 {[40, 70, 45, 90, 65, 80, 100].map((h, i) => (
+                   <div key={i} className="flex-1 bg-indigo-100 rounded-t-xl hover:bg-indigo-600 transition-colors cursor-pointer group relative" style={{ height: `${h}%` }}>
+                      <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">KES {h * 1000}</span>
+                   </div>
+                 ))}
               </div>
-              <div className="bg-white rounded shadow p-4">
-                <p className="text-sm text-gray-500">Total Revenue (KES)</p>
-                <p className="text-2xl font-bold">{totals.totalRevenue}</p>
-              </div>
-              <div className="bg-white rounded shadow p-4">
-                <p className="text-sm text-gray-500">Unique Buyers</p>
-                <p className="text-2xl font-bold">{totals.uniqueBuyers}</p>
+              <div className="flex justify-between mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* PROJECTS */}
-          {tab === "projects" && (
-            <div className="bg-white rounded shadow p-4">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold">All Projects</h2>
-                <input
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search title/desc/owner…"
-                  className="border rounded px-3 py-1"
-                />
-              </div>
-
-              {filteredProjects.length === 0 ? (
-                <p className="text-gray-500">No projects found.</p>
-              ) : (
-                <div className="grid md:grid-cols-3 gap-4">
-                  {filteredProjects.map((p) => (
-                    <div
-                      key={p.id}
-                      className="border rounded p-3 bg-gray-50 flex flex-col"
-                    >
-                      {p.imageUrl && (
-                        <img
-                          src={p.imageUrl}
-                          alt={p.title}
-                          className="w-full h-40 object-cover rounded mb-2"
-                        />
-                      )}
-                      <h3 className="font-semibold">{p.title}</h3>
-                      <p className="text-sm text-gray-600 line-clamp-3">
-                        {p.description}
-                      </p>
-                      <p className="mt-1 font-bold text-green-700">
-                        KES {p.price}
-                      </p>
-                      {p.ownerEmail && (
-                        <p className="text-xs text-gray-500">
-                          Seller: {p.ownerEmail}
-                        </p>
-                      )}
-                      <button
-                        onClick={() => handleDeleteProject(p.id)}
-                        className="mt-3 bg-red-600 text-white rounded px-3 py-1 hover:bg-red-700"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* PAYMENTS */}
-          {tab === "payments" && (
-            <div className="bg-white rounded shadow p-4">
-              <h2 className="text-xl font-semibold mb-4">Payment Summary</h2>
-
-              <div className="grid md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-gray-50 rounded p-3">
-                  <p className="text-sm text-gray-500">Total Orders</p>
-                  <p className="text-2xl font-bold">{totals.totalOrders}</p>
-                </div>
-                <div className="bg-gray-50 rounded p-3">
-                  <p className="text-sm text-gray-500">Revenue (KES)</p>
-                  <p className="text-2xl font-bold">{totals.totalRevenue}</p>
-                </div>
-                <div className="bg-gray-50 rounded p-3">
-                  <p className="text-sm text-gray-500">Unique Buyers</p>
-                  <p className="text-2xl font-bold">{totals.uniqueBuyers}</p>
-                </div>
-              </div>
-
-              {purchases.length === 0 ? (
-                <p className="text-gray-500">No purchases yet.</p>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-left border-b">
-                        <th className="py-2 pr-4">Date</th>
-                        <th className="py-2 pr-4">Buyer</th>
-                        <th className="py-2 pr-4">Project</th>
-                        <th className="py-2 pr-4">Amount</th>
-                        <th className="py-2 pr-4">Controls</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {purchases
-                        .slice()
-                        .reverse()
-                        .map((o, idx) => (
-                          <tr key={idx} className="border-b">
-                            <td className="py-2 pr-4">
-                              {o.timestamp
-                                ? new Date(o.timestamp).toLocaleString()
-                                : "-"}
-                            </td>
-                            <td className="py-2 pr-4">{o.buyerEmail || "-"}</td>
-                            <td className="py-2 pr-4">{o.projectTitle || o.projectId}</td>
-                            <td className="py-2 pr-4">KES {o.amount || o.price || 0}</td>
-                            <td className="py-2 pr-4">
-                              {o.buyerEmail && (
-                                <button
-                                  onClick={() => toggleBlock(o.buyerEmail)}
-                                  className={`px-2 py-1 rounded ${
-                                    blocked.includes(o.buyerEmail)
-                                      ? "bg-yellow-500 text-white"
-                                      : "bg-gray-200"
-                                  }`}
-                                  title="Toggle payment permission for this buyer"
-                                >
-                                  {blocked.includes(o.buyerEmail)
-                                    ? "Payments: OFF"
-                                    : "Payments: ON"}
-                                </button>
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-
-              <div className="mt-6">
-                <h3 className="font-semibold mb-2">Blocked Buyers</h3>
-                {blocked.length === 0 ? (
-                  <p className="text-sm text-gray-500">None</p>
-                ) : (
-                  <div className="flex flex-wrap gap-2">
-                    {blocked.map((e) => (
-                      <span
-                        key={e}
-                        className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded"
-                      >
-                        {e}
-                      </span>
-                    ))}
+        {tab === "projects" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
+            {filteredProjects.map((p) => (
+              <div key={p.id} className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm group hover:shadow-xl transition-all">
+                {p.imageUrl && <img src={p.imageUrl} alt="" className="w-full h-40 object-cover" />}
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-bold text-slate-800 line-clamp-1">{p.title}</h3>
+                    <span className="bg-green-100 text-green-700 text-[10px] px-2 py-1 rounded-full font-black uppercase">KES {p.price}</span>
                   </div>
-                )}
+                  <p className="text-xs text-slate-500 line-clamp-2 mb-4 leading-relaxed">{p.description}</p>
+                  <div className="flex items-center space-x-2 text-[10px] text-slate-400 font-bold mb-6">
+                    <span className="bg-slate-100 px-2 py-1 rounded uppercase tracking-wider">{p.ownerEmail}</span>
+                  </div>
+                  <button 
+                    onClick={() => handleDeleteProject(p.id)}
+                    className="w-full bg-red-50 text-red-600 py-3 rounded-2xl text-xs font-black hover:bg-red-600 hover:text-white transition-all uppercase tracking-widest"
+                  >
+                    Terminate Listing
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            ))}
+          </div>
+        )}
 
-          {/* USERS */}
-          {tab === "users" && (
-            <div className="bg-white rounded shadow p-4">
-              <h2 className="text-xl font-semibold mb-4">Users (derived)</h2>
-              <p className="text-sm text-gray-600 mb-4">
-                Since we’re using localStorage, users are inferred from purchases (buyers)
-                and projects (sellers). If you later store a proper users list, we can
-                switch this tab to Firestore easily.
-              </p>
-
-              {(() => {
-                const buyers = new Set(
-                  purchases.map((p) => p.buyerEmail).filter(Boolean)
-                );
-                const sellers = new Set(
-                  projects.map((p) => p.ownerEmail).filter(Boolean)
-                );
-                const all = Array.from(new Set([...buyers, ...sellers]));
-                if (all.length === 0) {
-                  return <p className="text-gray-500">No user data yet.</p>;
-                }
-                return (
-                  <ul className="space-y-2">
-                    {all.map((email) => (
-                      <li
-                        key={email}
-                        className="flex items-center justify-between bg-gray-50 border rounded px-3 py-2"
-                      >
-                        <span>{email}</span>
+        {tab === "payments" && (
+          <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm animate-in fade-in duration-500">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead className="bg-slate-50 border-b border-slate-100 text-[10px] uppercase font-black text-slate-400 tracking-widest">
+                  <tr>
+                    <th className="px-8 py-5">Timestamp</th>
+                    <th className="px-8 py-5">Buyer Account</th>
+                    <th className="px-8 py-5">System Asset</th>
+                    <th className="px-8 py-5">Revenue</th>
+                    <th className="px-8 py-5">Permissions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {purchases.slice().reverse().map((o, idx) => (
+                    <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-8 py-5 text-xs text-slate-500 font-medium">
+                        {o.timestamp ? new Date(o.timestamp).toLocaleString() : "Unknown"}
+                      </td>
+                      <td className="px-8 py-5 text-xs font-bold text-slate-700">{o.buyerEmail}</td>
+                      <td className="px-8 py-5 text-xs text-indigo-600 font-bold uppercase">{o.projectTitle || "Asset#"+o.projectId}</td>
+                      <td className="px-8 py-5 text-sm font-black text-slate-900">KES {o.amount || o.price || 0}</td>
+                      <td className="px-8 py-5">
                         <button
-                          onClick={() => toggleBlock(email)}
-                          className={`px-2 py-1 rounded ${
-                            blocked.includes(email)
-                              ? "bg-yellow-500 text-white"
-                              : "bg-gray-200"
+                          onClick={() => toggleBlock(o.buyerEmail)}
+                          className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase transition-all ${
+                            blocked.includes(o.buyerEmail)
+                              ? "bg-amber-100 text-amber-600 hover:bg-amber-600 hover:text-white"
+                              : "bg-emerald-100 text-emerald-600 hover:bg-emerald-600 hover:text-white"
                           }`}
                         >
-                          {blocked.includes(email)
-                            ? "Payments: OFF"
-                            : "Payments: ON"}
+                          {blocked.includes(o.buyerEmail) ? "Locked" : "Authorized"}
                         </button>
-                      </li>
-                    ))}
-                  </ul>
-                );
-              })()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          )}
-        </div>
-      </div>
-    </>
+          </div>
+        )}
+
+        {tab === "users" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-in fade-in duration-500">
+            {(() => {
+              const buyers = new Set(purchases.map(p => p.buyerEmail).filter(Boolean));
+              const sellers = new Set(projects.map(p => p.ownerEmail).filter(Boolean));
+              const all = Array.from(new Set([...buyers, ...sellers]));
+              
+              return all.map(email => (
+                <div key={email} className="bg-white p-6 rounded-3xl border border-slate-200 flex flex-col items-center text-center shadow-sm">
+                  <div className="h-16 w-16 bg-slate-100 rounded-2xl flex items-center justify-center text-xl mb-4 font-bold text-slate-400 uppercase tracking-tighter">
+                    {email.charAt(0)}
+                  </div>
+                  <h3 className="font-bold text-slate-800 text-sm mb-1 truncate w-full">{email}</h3>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase mb-6 tracking-widest">
+                    {sellers.has(email) ? "Verified Seller" : "Platform Buyer"}
+                  </p>
+                  <button
+                    onClick={() => toggleBlock(email)}
+                    className={`w-full py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                      blocked.includes(email)
+                        ? "bg-red-500 text-white shadow-lg shadow-red-200"
+                        : "bg-slate-900 text-white hover:bg-slate-700 shadow-lg shadow-slate-200"
+                    }`}
+                  >
+                    {blocked.includes(email) ? "Unblock Account" : "Block Payments"}
+                  </button>
+                </div>
+              ));
+            })()}
+          </div>
+        )}
+      </main>
+    </div>
   );
 };
 

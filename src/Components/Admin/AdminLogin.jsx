@@ -15,9 +15,9 @@ const AdminLogin = () => {
     e.preventDefault();
     setError("");
 
-    if (email.trim().toLowerCase() === ADMIN_EMAIL && pass === ADMIN_PASS) {
+    if (email.trim().toLowerCase() === ADMIN_EMAIL && pass.trim() === ADMIN_PASS) {
       localStorage.setItem("adminAuthed", "true");
-      navigate("/admin/dashboard");
+      navigate("/admin-dashboard");
     } else {
       setError("Invalid admin credentials.");
     }

@@ -51,16 +51,16 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center ">   
-        <Link to="/" className="text-3xl font-bold text-blue-800">
+        <Link to="/" className="text-3xl font-bold" style={{ color: "#FF7F50" }}>
           DevSoko
         </Link>
         <div className="space-x-4">
-          <Link to="/projects" className="text-gray-700 hover:text-blue-700">
+          <Link to="/projects" className="text-gray-700 hover:text-blue-600">
             Projects
           </Link>
 
           {role === "seller" && (
-            <Link to="/upload" className="text-gray-700 hover:text-blue-700">
+            <Link to="/upload" className="text-gray-700 hover:text-blue-600">
               Upload
             </Link>
           )}
@@ -69,13 +69,14 @@ const Navbar = () => {
             <>
               <Link
                 to="/login"
-                className="text-gray-700 hover:text-blue-700"
+                className="text-gray-700 hover:text-blue-600"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="bg-blue-800 text-white px-3 py-1 rounded hover:bg-blue-700"
+                className="text-white px-3 py-1 rounded hover:opacity-90 transition-all"
+                style={{ backgroundColor: "#FF7F50" }}
               >
                 Register
               </Link>
@@ -84,7 +85,7 @@ const Navbar = () => {
             <>
               <Link
                 to="/dashboard"
-                className="text-gray-700 hover:text-blue-700"
+                className="text-gray-700 hover:text-blue-600"
               >
                 Dashboard
               </Link>

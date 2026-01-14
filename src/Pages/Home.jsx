@@ -38,7 +38,7 @@ const Home = ({ onGetStarted, onViewProjects }) => {
         
         <h1
           className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-2xl animate-in fade-in zoom-in duration-1000"
-          style={{ color: "burlywood" }}
+          style={{ color: "#FF7F50" }}
         >
           Welcome to DevSoko
         </h1>
@@ -48,7 +48,7 @@ const Home = ({ onGetStarted, onViewProjects }) => {
           <br />
           Upload your code, find your tribe, and turn passion into pay.
           <br />
-          <span className="text-blue-300 font-semibold mt-2 block">
+          <span className="text-red-300 font-semibold mt-2 block">
             Code It, Sell It, Flex It
           </span>
         </p>
@@ -74,7 +74,7 @@ const Home = ({ onGetStarted, onViewProjects }) => {
         <div className="max-w-6xl mx-auto">
           <h2
             className="text-4xl font-bold text-center mb-16"
-            style={{ color: "burlywood" }}
+            style={{ color: "#FF7F50" }}
           >
             Why DevSoko?
           </h2>

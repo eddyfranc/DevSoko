@@ -19,7 +19,6 @@ class Order(models.Model):
         return f"Order {self.id} - {self.status}"
 
 
-# Create your models here.
 #Mpesa Transaction Model
 class MpesaRequest(models.Model):
     phone_number = models.CharField(max_length=15)

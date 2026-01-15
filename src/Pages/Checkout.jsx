@@ -17,10 +17,10 @@ const Checkout = () => {
   amount: 100
 });
 
-      alert("✅ STK Push Sent! Check your phone to complete payment.");
+      alert("STK Push Sent! Check your phone to complete payment.");
       console.log("Payment response:", res.data);
     } catch (err) {
-      console.error("❌ Payment error:", err);
+      console.error(" Payment error:", err);
       alert("Something went wrong during payment. Try again.");
     }
   };

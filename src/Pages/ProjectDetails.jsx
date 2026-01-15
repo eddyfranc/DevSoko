@@ -20,7 +20,7 @@ const ProjectDetails = () => {
   };
 
   if (!project) {
-    return <div className="text-center text-xl mt-10">Project not found 😢</div>;
+    return <div className="text-center text-xl mt-10">Project not found !</div>;
   }
 
   return (

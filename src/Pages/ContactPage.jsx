@@ -135,7 +135,7 @@ const ContactPage = () => {
               NEED HELP? <span className="text-gray-700">CHAT WITH US</span>
             </span>
             <a
-              href="https://wa.me/ww.no"
+              href="https://wa.me/wa.no"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-green-500 p-4 rounded-full text-white shadow-lg hover:bg-green-600 transition"

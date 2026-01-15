@@ -55,7 +55,7 @@ const Navbar = () => {
           DevSoko
         </Link>
         <div className="space-x-4">
-          <Link to="/projects" className="text-gray-100 hover:text-blue-600">
+          <Link to="/projects" className="text-red-100 hover:text-blue-600">
             Projects
           </Link>
 
@@ -69,7 +69,7 @@ const Navbar = () => {
             <>
               <Link
                 to="/login"
-                className="text-gray-100 hover:text-blue-600"
+                className="text-red-700 hover:text-blue-600"
               >
                 Login
               </Link>

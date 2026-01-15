@@ -145,8 +145,8 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
-      <h1 className="text-center"> Partners and customers</h1>
-      <div>Zindua</div>
+      {/* <h1 className="text-center"> Partners and customers</h1> */}
+      {/* <div>Zindua</div> */}
 
     </div>
   );

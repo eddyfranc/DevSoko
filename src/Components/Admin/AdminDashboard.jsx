@@ -11,7 +11,7 @@ const getPaymentBlocks = () => JSON.parse(localStorage.getItem("paymentDisabledF
 const setPaymentBlocks = (arr) => localStorage.setItem("paymentDisabledFor", JSON.stringify(arr));
 
 /**
- * AdminDashboard component provides the administrative interface for managing projects,
+ * dministrative interface for managing projects,
  * transactions, and users.
  */
 const AdminDashboard = ({ user = { name: "Admin" } }) => {

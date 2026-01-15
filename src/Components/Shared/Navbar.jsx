@@ -55,12 +55,12 @@ const Navbar = () => {
           DevSoko
         </Link>
         <div className="space-x-4">
-          <Link to="/projects" className="text-gray-200 hover:text-blue-600">
+          <Link to="/projects" className="text-gray-100 hover:text-blue-600">
             Projects
           </Link>
 
           {role === "seller" && (
-            <Link to="/upload" className="text-gray-900 hover:text-blue-600">
+            <Link to="/upload" className="text-gray-700 hover:text-blue-600">
               Upload
             </Link>
           )}
@@ -69,7 +69,7 @@ const Navbar = () => {
             <>
               <Link
                 to="/login"
-                className="text-gray-200 hover:text-blue-600"
+                className="text-gray-100 hover:text-blue-600"
               >
                 Login
               </Link>

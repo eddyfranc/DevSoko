@@ -104,7 +104,7 @@ const ContactPage = () => {
                 <FaFacebookF />
               </a>
               <a
-                href="https://x.com/eddyfrank317"
+                href="https://x.com/YourHandle"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-blue-800 p-3 rounded-full text-white hover:bg-blue-600 transition"
@@ -119,7 +119,7 @@ const ContactPage = () => {
                 <FaInstagram />
               </a>
               <a
-                href="https://www.linkedin.com/in/edyfrank"
+                href="https://www.linkedin.com/in/YourHandle"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-blue-800 p-3 rounded-full text-white hover:bg-blue-600 transition"

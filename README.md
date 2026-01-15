@@ -56,17 +56,4 @@ This project is ideal for students, freelancers, and developers looking for a si
 
 ---
 
-## 🚀 Getting Started
 
-### Prerequisites
-
-- Node.js & npm
-- Python 3.10+
-- PostgreSQL & pgAdmin
-- Git
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/yourusername/devsoko.git
-cd devsoko

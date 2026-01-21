@@ -20,6 +20,7 @@ const ViewProjects = () => {
     return () => clearTimeout(timer);
   }, []);
 
+
   const categories = ['All Systems', 'Frontend', 'Backend', 'Full Stack', 'Mobile Engine', 'UI Kit', 'AI/ML Script'];
 
   const filteredProjects = useMemo(() => {

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import NewProjectsAvailable from "./NewProjectsAvailable"; 
 import Footer from "../Components/Shared/Footer";
 
-
 const Home = () => {
   const navigate = useNavigate();
   

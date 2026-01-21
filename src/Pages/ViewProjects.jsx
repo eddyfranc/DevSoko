@@ -159,7 +159,7 @@ const ViewProjects = () => {
                       href={`/checkout?id=${proj.id}`}
                       className="bg-slate-900 text-white px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 shadow-lg shadow-slate-100 transition-all flex items-center space-x-2"
                     >
-                      <span>Get License</span>
+                      <span>Purchase</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                       </svg>

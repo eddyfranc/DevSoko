@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import NewProjectsAvailable from "./NewProjectsAvailable"; 
 import Footer from "../Components/Shared/Footer";
 
-const Home = ({ onGetStarted, onViewProjects }) => {
+const Home = ({ onViewProjects }) => {
   const navigate = useNavigate();
   
   // Using curated Unsplash images to represent your background1-5

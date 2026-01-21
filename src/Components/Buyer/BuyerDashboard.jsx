@@ -85,11 +85,10 @@ const BuyerDashboard = ({ user }) => {
   }
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-700">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-700 pt-24">
       {/* Header & Search */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tight">System <span className="text-indigo-600">Market</span></h1>
           <p className="text-slate-500 font-medium mt-1">Source high-performance codebases for your next project.</p>
         </div>
         
@@ -163,7 +162,10 @@ const BuyerDashboard = ({ user }) => {
                           Acquired ✓
                         </button>
                       ) : (
-                        <button className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-600 transition-all active:scale-95 shadow-lg shadow-slate-200">
+                        <button 
+                          onClick={() => navigate('/checkout', { state: { project } })}
+                          className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-600 transition-all active:scale-95 shadow-lg shadow-slate-200"
+                        >
                           Purchase
                         </button>
                       )}

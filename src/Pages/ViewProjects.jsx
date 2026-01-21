@@ -21,6 +21,7 @@ const ViewProjects = () => {
   }, []);
 
 
+
   const categories = ['All Systems', 'Frontend', 'Backend', 'Full Stack', 'Mobile Engine', 'UI Kit', 'AI/ML Script'];
 
   const filteredProjects = useMemo(() => {

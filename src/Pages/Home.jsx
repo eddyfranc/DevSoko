@@ -1,9 +1,12 @@
 
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NewProjectsAvailable from "./NewProjectsAvailable"; 
 import Footer from "../Components/Shared/Footer";
 
 const Home = ({ onGetStarted, onViewProjects }) => {
+  const navigate = useNavigate();
+  
   // Using curated Unsplash images to represent your background1-5
   const backgroundImages = [
     "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=2070",
@@ -55,7 +58,7 @@ const Home = ({ onGetStarted, onViewProjects }) => {
 
         <div className="flex flex-wrap justify-center gap-6 z-10">
           <button
-            onClick={onGetStarted}
+            onClick={() => navigate('/register')}
             className="bg-blue-700 hover:bg-blue-600 text-white px-10 py-4 rounded-lg font-bold transition-all transform hover:scale-105 shadow-xl shadow-blue-500/20"
           >
             Get Started

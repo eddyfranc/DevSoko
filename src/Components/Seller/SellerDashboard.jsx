@@ -295,6 +295,9 @@ const SellerDashboard = ({ user, setUser }) => {
                     className="w-full bg-slate-50 border-0 rounded-2xl px-6 py-4 outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-800"
                   >
                     <option>Full Stack</option>
+                    <option>Frontend</option>
+                    <option>Backend</option>
+                    <option>Data Science</option>
                     <option>Mobile Engine</option>
                     <option>UI Kit</option>
                     <option>AI/ML Script</option>

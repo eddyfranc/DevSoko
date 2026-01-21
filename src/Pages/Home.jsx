@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import NewProjectsAvailable from "./NewProjectsAvailable"; 
 import Footer from "../Components/Shared/Footer";
 
-const Home = ({ onViewProjects }) => {
+const Home = () => {
   const navigate = useNavigate();
   
   // Using curated Unsplash images to represent your background1-5
@@ -64,7 +64,7 @@ const Home = ({ onViewProjects }) => {
             Get Started
           </button>
           <button
-            onClick={onViewProjects}
+            onClick={() => navigate('/projects')}
             className="bg-white text-blue-900 px-10 py-4 rounded-lg font-bold hover:bg-gray-100 transition-all transform hover:scale-105"
           >
             View Projects

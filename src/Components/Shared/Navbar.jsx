@@ -40,7 +40,7 @@ const Navbar = ({ theme, toggleTheme }) => {
           className="flex items-center gap-3 hover:opacity-90 transition-opacity duration-300"
           onClick={() => setIsMobileOpen(false)}
         >
-<img src={DevSokoLogo} alt="DevSoko Logo" className="h-14 w-auto max-h-14 object-contain drop-shadow-lg hover:scale-110 transition-all duration-300" />
+<img src={DevSokoLogo} alt="DevSoko Logo" className="h-16 w-16 rounded-full object-contain drop-shadow-lg hover:scale-110 transition-all duration-300" />
           <div className="flex flex-col">
             <span className="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">
               DevSoko

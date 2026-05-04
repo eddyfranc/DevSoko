@@ -80,9 +80,40 @@ button:focus-visible {
 :root {
   --color-primary: 219 39 74;
   --color-primary-50: 254 252 232;
-  --color-bg-dark: 17 24 39;
-  --color-card-dark: 30 41 59;
+  --color-bg-light: 255 255 255;
+  --color-surface-light: 255 255 255;
+  --color-border-light: 226 232 240;
+  --color-text-light: 15 23 42;
+  --color-bg-dark: 5 10 27;
+  --color-surface-dark: 14 25 46;
+  --color-border-dark: 71 85 105;
   --color-text-dark: 243 244 246;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: rgb(var(--color-bg-light));
+  color: rgb(var(--color-text-light));
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-attachment: fixed;
+}
+
+.dark body {
+  background-color: rgb(var(--color-bg-dark));
+  color: rgb(var(--color-text-dark));
+  background-image: none;
+}
+
+.light-grid-background {
+  background-color: rgb(var(--color-bg-light));
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
 /* Dark mode */

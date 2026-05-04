@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import NewProjectsAvailable from "./NewProjectsAvailable"; 
 import Footer from "../Components/Shared/Footer";
 
-const Home = () => {
+const Home = ({ theme }) => {
   const navigate = useNavigate();
+  const darkMode = theme === 'dark';
   
   // Using curated Unsplash images to represent your background1-5
   const backgroundImages = [
@@ -27,13 +28,22 @@ const Home = () => {
   }, [backgroundImages.length]);
 
   return (
-    <div className="bg-slate-950 dark:bg-slate-950">
+    <div className="bg-white dark:bg-slate-950">
       {/* Hero Section */}
       <div
-        className="min-h-screen pt-24 flex flex-col items-center justify-center bg-cover bg-center px-6 text-center transition-all duration-1000 relative"
-        style={{
-          backgroundImage: `linear-gradient(rgba(2, 6, 23, 0.75), rgba(2, 6, 23, 0.75)), url(${backgroundImages[currentImageIndex]})`,
-        }}
+        className="min-h-screen pt-24 flex flex-col items-center justify-center px-6 text-center transition-all duration-1000 relative bg-cover bg-center"
+        style={
+          darkMode
+            ? {
+                backgroundImage: `linear-gradient(rgba(2, 6, 23, 0.75), rgba(2, 6, 23, 0.75)), url(${backgroundImages[currentImageIndex]})`,
+              }
+            : {
+                backgroundImage: `linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.82)), linear-gradient(to right, rgba(148, 163, 184, 0.16) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, 0.16) 1px, transparent 1px), url(${backgroundImages[currentImageIndex]})`,
+                backgroundSize: 'cover, 28px 28px, 28px 28px, cover',
+                backgroundRepeat: 'no-repeat, repeat, repeat, no-repeat',
+                backgroundPosition: 'center, 0 0, 0 0, center',
+              }
+        }
       >
         <div className="z-10 animate-in fade-in slide-in-from-top duration-700">
           <NewProjectsAvailable /> 
@@ -46,12 +56,12 @@ const Home = () => {
           Welcome to DevSoko
         </h1>
         
-        <p className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto text-white drop-shadow-md leading-relaxed">
+        <p className={`text-xl md:text-2xl mb-10 max-w-3xl mx-auto ${darkMode ? 'text-white' : 'text-slate-700'} drop-shadow-md leading-relaxed`}>
           Built by devs, for dreamers.
           <br />
           Upload your code, find your tribe, and turn passion into pay.
           <br />
-          <span className="text-red-300 font-semibold mt-2 block">
+          <span className={`${darkMode ? 'text-red-300' : 'text-red-600'} font-semibold mt-2 block`}>
             Code It, Sell It, Flex It
           </span>
         </p>

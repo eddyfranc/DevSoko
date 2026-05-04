@@ -42,7 +42,7 @@ function App() {
         {!hideNavbar && <Navbar theme={theme} toggleTheme={toggleTheme} />}
        
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home theme={theme} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login theme={theme} toggleTheme={toggleTheme} />} />
         <Route path="/upload" element={<UploadProject />} />

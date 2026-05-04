@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
 import useUserRole from "../../hooks/useUserRole";
+import DevSokoLogo from "../../assets/DevSoko Logo.png";
 
 const Navbar = ({ theme, toggleTheme }) => {
   const [user, setUser] = useState(null);
@@ -34,18 +35,21 @@ const Navbar = ({ theme, toggleTheme }) => {
   return (
     <nav className="w-full bg-white/80 dark:bg-slate-950/80 border-b border-slate-200/70 dark:border-slate-800/70 backdrop-blur-xl shadow-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col">
-          <NavLink
-            to="/"
-            className="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100 hover:text-slate-700 dark:hover:text-white transition-colors duration-300"
-            onClick={() => setIsMobileOpen(false)}
-          >
-            DevSoko
-          </NavLink>
-          <span className="text-xs uppercase tracking-[0.32em] text-slate-500 dark:text-slate-400 mt-1">
-            Convert Code into Coins
-          </span>
-        </div>
+        <NavLink
+          to="/"
+          className="flex items-center gap-3 hover:opacity-90 transition-opacity duration-300"
+          onClick={() => setIsMobileOpen(false)}
+        >
+<img src={DevSokoLogo} alt="DevSoko Logo" className="h-14 w-auto max-h-14 object-contain drop-shadow-lg hover:scale-110 transition-all duration-300" />
+          <div className="flex flex-col">
+            <span className="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">
+              DevSoko
+            </span>
+            <span className="text-xs uppercase tracking-[0.32em] text-slate-500 dark:text-slate-400">
+              Convert Code into Coins
+            </span>
+          </div>
+        </NavLink>
 
         <div className="hidden items-center gap-3 md:flex">
           <NavLink

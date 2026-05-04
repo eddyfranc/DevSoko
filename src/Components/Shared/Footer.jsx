@@ -1,12 +1,17 @@
 import { Link } from "react-router-dom";
+import DevSokoLogo from "../../assets/DevSoko Logo.png";
 
 const Footer = () => {
   return (
     <footer className="bg-blue-800 text-white py-12 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <Link to="/" className="text-3xl font-bold text-burlywood">
-            DevSoko
+          <Link to="/" className="inline-flex items-center gap-3 hover:opacity-90 transition-opacity duration-300">
+<img src={DevSokoLogo} alt="DevSoko Logo" className="h-12 w-auto max-h-12 object-contain drop-shadow-lg hover:scale-105 transition-all duration-300" />
+            <div>
+              <span className="text-xl font-bold text-white">DevSoko</span>
+              <span className="text-xs text-gray-300 block">Convert Code into Coins</span>
+            </div>
           </Link>
           <p className="mt-4 text-gray-400">
             Built by devs, for dreamers. Your marketplace for digital assets.

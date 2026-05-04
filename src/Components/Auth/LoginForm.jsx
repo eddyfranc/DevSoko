@@ -109,7 +109,7 @@ const LoginForm = () => {
               id="email"
               type="email"
               placeholder="name@company.com"
-              className="flex h-12 w-full border-b-2 border-[#D1D1D1] bg-transparent px-0 py-2 text-base font-medium placeholder:text-slate-300 focus:outline-none focus:border-[#0A0A0A] transition-colors duration-300 disabled:opacity-50"
+              className="flex h-12 w-full border-b-2 border-slate-500/50 bg-transparent px-0 py-2 text-slate-200 dark:text-slate-300 text-base font-medium placeholder:text-slate-400 focus:outline-none focus:border-primary-500 transition-colors duration-300 disabled:opacity-50"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -132,7 +132,7 @@ const LoginForm = () => {
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
-              className="flex h-12 w-full border-b-2 border-[#D1D1D1] bg-transparent px-0 py-2 text-base font-medium placeholder:text-slate-300 focus:outline-none focus:border-[#0A0A0A] transition-colors duration-300 disabled:opacity-50"
+              className="flex h-12 w-full border-b-2 border-slate-500/50 bg-transparent px-0 py-2 text-slate-200 dark:text-slate-300 text-base font-medium placeholder:text-slate-400 focus:outline-none focus:border-primary-500 transition-colors duration-300 disabled:opacity-50"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -161,11 +161,11 @@ const LoginForm = () => {
           )}
         </AnimatePresence>
 
-        <motion.button
+          <motion.button
           variants={itemVariants}
           type="submit"
           disabled={loading}
-          className="w-full h-14 bg-[#0A0A0A] text-[#F5F5F4] font-black uppercase tracking-[0.1em] text-sm hover:opacity-90 active:scale-[0.99] transition-all disabled:opacity-50 flex items-center justify-center space-x-2"
+          className="w-full h-14 bg-gradient-to-r from-primary-500 to-orange-500 hover:from-primary-600 hover:to-orange-600 text-white font-black uppercase tracking-[0.1em] text-sm active:scale-[0.99] transition-all disabled:opacity-50 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl rounded-xl"
         >
           {loading ? (
             <Loader2 className="w-5 h-5 animate-spin" />
@@ -185,7 +185,7 @@ const LoginForm = () => {
         <button
           onClick={handleGoogleLogin}
           disabled={loading}
-          className="w-full flex h-12 items-center justify-center space-x-3 border border-[#D1D1D1] bg-transparent px-4 py-2 text-xs font-bold text-[#0A0A0A] uppercase tracking-widest hover:bg-white transition-all active:scale-[0.99]"
+          className="w-full flex h-12 items-center justify-center space-x-3 border border-slate-500/50 hover:border-primary-400 bg-slate-800/50 backdrop-blur-sm px-4 py-2 text-sm font-bold text-slate-200 uppercase tracking-wider hover:bg-slate-700/50 transition-all active:scale-[0.99] rounded-lg"
         >
           <svg className="h-5 w-5" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/>

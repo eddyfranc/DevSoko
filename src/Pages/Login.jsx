@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import LoginForm from "../Components/Auth/LoginForm";
+import DevSokoLogo from "../assets/DevSoko Logo.png";
 
 const Login = ({ theme }) => {
   const darkMode = theme === 'dark';
@@ -31,7 +32,7 @@ const Login = ({ theme }) => {
 
   return (
     <div className={`min-h-screen relative overflow-hidden transition-all duration-500 ${
-      darkMode ? 'dark bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' : 'bg-gradient-to-br from-gradient-50 via-blue-50 to-indigo-100'
+      darkMode ? 'dark bg-gradient-to-br from-slate-900 via-slate-950 to-[#020617]' : 'bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100'
     }`}>
       {/* Animated code particles */}
       <div className="absolute inset-0 pointer-events-none">
@@ -55,27 +56,25 @@ const Login = ({ theme }) => {
       {/* Floating orbs */}
       <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-primary-400/20 to-orange-400/20 rounded-full blur-3xl animate-float delay-1000"></div>
       <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-indigo-400/20 to-primary-400/20 rounded-full blur-3xl animate-float delay-2000"></div>
-      <div className="absolute top-1/2 left-1/4 w-40 h-40 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-2xl animate-pulse"></div>
+      <div className="absolute top-1/2 left-1/4 w-40 h-40 bg-gradient-to-r from-slate-700/20 to-slate-600/20 rounded-full blur-2xl animate-pulse"></div>
 
 
       {/* Main content */}
       <div className="min-h-screen flex items-center justify-center p-4 lg:p-8 relative z-10">
         <div className={`max-w-md w-full space-y-8 transition-all duration-700 ${
-          darkMode ? 'bg-slate-900/90 backdrop-blur-3xl border border-slate-700/50 shadow-2xl' : 'bg-white/80 backdrop-blur-3xl border border-white/50 shadow-2xl'
+          darkMode ? 'bg-slate-800/90 backdrop-blur-3xl border border-slate-700/50 shadow-2xl' : 'bg-white/80 backdrop-blur-xl border border-white/50 shadow-2xl'
         } rounded-3xl p-10`}>
           <div className="text-center space-y-4">
-<div className="mx-auto w-24 h-24 bg-gradient-to-r from-primary-500 to-orange-500 rounded-3xl flex items-center justify-center shadow-2xl animate-glow login-font">
-              <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
+            <div className="mx-auto w-24 h-24 flex items-center justify-center shadow-2xl animate-glow">
+              <img src={DevSokoLogo} alt="DevSoko Logo" className="h-20 w-20 rounded-full object-contain drop-shadow-lg" />
             </div>
             <div className="space-y-2">
-              <h1 className={`text-4xl font-black bg-gradient-to-r from-primary-500 to-orange-600 bg-clip-text text-transparent ${
+              <h1 className={`text-4xl font-black bg-gradient-to-r from-primary-500 to-orange-500 bg-clip-text text-transparent ${
                 darkMode ? 'drop-shadow-lg' : ''
               }`}>
                 DevSoko
               </h1>
-              <p className={`text-sm ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+              <p className={`text-sm ${darkMode ? 'text-slate-300' : 'text-slate-400'}`}>
                 Convert Code into Coins.
               </p>
             </div>

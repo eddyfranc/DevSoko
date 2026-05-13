@@ -112,7 +112,8 @@ const ContactPage = () => {
                 <FaTwitter />
               </a>
               <a
-                href="https://instagram.com/YourHandle"
+                href="https://instagram.com/devsoko.hq"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="bg-blue-800 p-3 rounded-full text-white hover:bg-blue-600 transition"
               >
@@ -135,7 +136,7 @@ const ContactPage = () => {
               NEED HELP? <span className="text-slate-700 dark:text-slate-100">CHAT WITH US</span>
             </span>
             <a
-              href="https://wa.me/wa.no"
+              href="https://wa.me/<254779185210>?text=Hello%20DevSoko%2C%20I%20need%20assistance%20with%20my"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-green-500 p-4 rounded-full text-white shadow-lg hover:bg-green-600 transition"

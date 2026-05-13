@@ -82,14 +82,13 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       {/* Left Side - Dark Terminal Theme */}
-      <div className="w-1/2 bg-[#0d1117] relative overflow-hidden">
+      <div className="w-1/2 relative overflow-hidden bg-slate-950 dark:bg-[#0d1117]">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-20 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-green-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-20 left-20 w-32 h-32 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-40 h-40 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-3xl"></div>
         </div>
 
         {/* Floating Terminal Window */}
@@ -97,7 +96,7 @@ const Register = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[320px] bg-black/80 backdrop-blur-sm rounded-xl border border-gray-700/50 shadow-2xl"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[320px] bg-slate-950/95 dark:bg-black/80 backdrop-blur-sm rounded-xl border border-slate-700/50 dark:border-slate-600/50 shadow-2xl"
         >
           {/* Terminal Header */}
           <div className="flex items-center justify-between px-4 py-3 bg-gray-800/50 rounded-t-xl border-b border-gray-700/50">
@@ -144,10 +143,10 @@ const Register = () => {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="absolute top-16 left-16 flex space-x-6"
         >
-          <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center backdrop-blur-sm border border-blue-500/30">
+          <div className="w-12 h-12 bg-blue-500/10 dark:bg-blue-500/20 rounded-lg flex items-center justify-center backdrop-blur-sm border border-blue-500/30 dark:border-blue-500/40">
             <Code2 className="w-6 h-6 text-blue-400" />
           </div>
-          <div className="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center backdrop-blur-sm border border-yellow-500/30">
+          <div className="w-12 h-12 bg-yellow-500/10 dark:bg-yellow-500/20 rounded-lg flex items-center justify-center backdrop-blur-sm border border-yellow-500/30 dark:border-yellow-500/40">
             <Zap className="w-6 h-6 text-yellow-400" />
           </div>
         </motion.div>
@@ -171,7 +170,7 @@ const Register = () => {
       </div>
 
       {/* Right Side - Clean White Form */}
-      <div className="w-1/2 bg-white flex items-center justify-center p-12">
+      <div className="w-1/2 bg-white dark:bg-slate-950 flex items-center justify-center p-12">
         <motion.div
           initial="hidden"
           animate="visible"
@@ -182,8 +181,8 @@ const Register = () => {
         >
           {/* Header */}
           <motion.div variants={itemVariants} className="text-center space-y-2">
-            <h1 className="text-3xl font-bold text-gray-900 font-['Inter']">Join DevSoko</h1>
-            <p className="text-gray-600 text-sm">Connect with developers worldwide</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white font-['Inter']">Join DevSoko</h1>
+            <p className="text-gray-600 dark:text-slate-400 text-sm">Connect with developers worldwide</p>
           </motion.div>
 
           {/* Google Sign Up */}
@@ -191,7 +190,7 @@ const Register = () => {
             variants={itemVariants}
             onClick={handleGoogleLogin}
             disabled={loading}
-            className="w-full flex h-12 items-center justify-center space-x-3 border-2 border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50 px-4 py-2 text-sm font-semibold text-gray-700 transition-all active:scale-[0.98] rounded-lg shadow-sm"
+            className="w-full flex h-12 items-center justify-center space-x-3 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-gray-300 dark:hover:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-slate-100 transition-all active:scale-[0.98] rounded-lg shadow-sm"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/>
@@ -204,23 +203,23 @@ const Register = () => {
 
           {/* OR Divider */}
           <motion.div variants={itemVariants} className="flex items-center gap-4 py-4">
-            <div className="flex-1 h-[1px] bg-gray-200"></div>
-            <span className="text-gray-500 text-sm font-medium">OR</span>
-            <div className="flex-1 h-[1px] bg-gray-200"></div>
+            <div className="flex-1 h-[1px] bg-gray-200 dark:bg-slate-700"></div>
+            <span className="text-gray-500 dark:text-slate-400 text-sm font-medium">OR</span>
+            <div className="flex-1 h-[1px] bg-gray-200 dark:bg-slate-700"></div>
           </motion.div>
 
           {/* Registration Form */}
           <form onSubmit={handleRegister} className="space-y-6">
             {/* Email Field */}
             <motion.div variants={itemVariants} className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wide text-gray-600" htmlFor="email">
+              <label className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-slate-400" htmlFor="email">
                 Email Address
               </label>
               <input
                 id="email"
                 type="email"
                 placeholder="name@company.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-400"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-500"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -229,14 +228,14 @@ const Register = () => {
 
             {/* Password Field */}
             <motion.div variants={itemVariants} className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wide text-gray-600" htmlFor="password">
+              <label className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-slate-400" htmlFor="password">
                 Password
               </label>
               <input
                 id="password"
                 type="password"
                 placeholder="••••••••"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-400"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-500"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 minLength="8"
@@ -247,14 +246,14 @@ const Register = () => {
 
             {/* Role Selection */}
             <motion.div variants={itemVariants} className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wide text-gray-600" htmlFor="role">
+              <label className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-slate-400" htmlFor="role">
                 Account Type
               </label>
               <select
                 id="role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 bg-white"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 dark:text-slate-100"
                 required
               >
                 <option value="buyer">Buyer - Hire developers</option>
@@ -267,7 +266,7 @@ const Register = () => {
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3 text-red-600 text-sm"
+                className="p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-600 rounded-lg flex items-start gap-3 text-red-600 dark:text-red-300 text-sm"
               >
                 <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <span>{error}</span>
@@ -279,7 +278,7 @@ const Register = () => {
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3 text-green-600 text-sm"
+                className="p-4 bg-green-50 dark:bg-emerald-950/40 border border-green-200 dark:border-emerald-600 rounded-lg flex items-start gap-3 text-green-600 dark:text-emerald-300 text-sm"
               >
                 <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <span>Registration successful! Check your email to verify. Redirecting...</span>
@@ -308,9 +307,9 @@ const Register = () => {
 
           {/* Sign In Link */}
           <motion.div variants={itemVariants} className="text-center pt-4">
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-600 dark:text-slate-400 text-sm">
               Already have an account?{" "}
-              <a href="/login" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+              <a href="/login" className="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
                 Sign in
               </a>
             </p>

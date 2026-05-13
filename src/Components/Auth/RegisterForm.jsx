@@ -34,7 +34,7 @@ const RegisterForm = () => {
 
       if (insertError) throw insertError;
 
-      console.log("✅ User registered and saved to Supabase.");
+      console.log("User registered and saved to Supabase.");
       alert("Registration successful! Please check your email to verify your account before logging in.");
       navigate("/login");
     } catch (err) {

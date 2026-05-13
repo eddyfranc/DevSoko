@@ -45,7 +45,7 @@ const Register = () => {
 
       if (insertError) throw insertError;
 
-      console.log("✅ User registered and saved to Supabase.");
+      console.log(" User registered and saved to Supabase.");
       setSuccess(true);
       setTimeout(() => {
         navigate("/login");
@@ -111,7 +111,7 @@ const Register = () => {
 
           {/* Terminal Content */}
           <div className="p-6 font-mono text-sm">
-            <div className="text-green-400 mb-2">$ devsoko --init</div>
+            <div className="text-green-400 mb-2">$ DevSoko --init</div>
             <div className="text-gray-300 mb-4">
               <span className="text-blue-400">import</span> React <span className="text-blue-400">from</span> <span className="text-yellow-400">'react'</span>;
             </div>
@@ -160,11 +160,11 @@ const Register = () => {
         >
           <div className="flex items-center space-x-3 text-gray-300">
             <Users className="w-5 h-5 text-green-400" />
-            <span className="text-sm">10,000+ Developers</span>
+            <span className="text-sm">1000+ Developers</span>
           </div>
           <div className="flex items-center space-x-3 text-gray-300">
             <Star className="w-5 h-5 text-yellow-400" />
-            <span className="text-sm">50,000+ Projects</span>
+            <span className="text-sm">5000+ Projects</span>
           </div>
         </motion.div>
       </div>

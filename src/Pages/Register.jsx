@@ -11,7 +11,7 @@ import {
   Users,
   Star
 } from "lucide-react";
-import { ensureGoogleUserProfile, getDashboardPath, startGoogleOAuth } from "../utils/googleAuth";
+import { ensureGoogleUserProfile, getDashboardPath, hasPendingGoogleAuthCallback, startGoogleOAuth } from "../utils/googleAuth";
 import { ensureWallet, upsertProfile } from "../lib/supabaseMarketplace";
 
 const getFriendlyAuthError = (error) => {
@@ -112,6 +112,13 @@ const Register = () => {
     let cancelled = false;
 
     const completeGoogleSignup = async () => {
+      if (!hasPendingGoogleAuthCallback()) {
+        return;
+      }
+
+      setLoading(true);
+      setError("");
+
       try {
         const result = await ensureGoogleUserProfile({
           defaultRole: role,
@@ -123,6 +130,13 @@ const Register = () => {
         }
       } catch (err) {
         console.error("Google signup completion error:", err);
+        if (!cancelled) {
+          setError(err.message || "Google sign up failed. Please try again.");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
 

@@ -8,7 +8,7 @@ import {
   Loader2,
   AlertCircle
 } from "lucide-react";
-import { ensureGoogleUserProfile, getDashboardPath, startGoogleOAuth } from "../../utils/googleAuth";
+import { ensureGoogleUserProfile, getDashboardPath, hasPendingGoogleAuthCallback, startGoogleOAuth } from "../../utils/googleAuth";
 import { resolveUserRole } from "../../lib/supabaseMarketplace";
 
 const LoginForm = () => {
@@ -65,16 +65,14 @@ const LoginForm = () => {
     let cancelled = false;
 
     const completeGoogleLogin = async () => {
+      if (!hasPendingGoogleAuthCallback()) {
+        return;
+      }
+
+      setLoading(true);
+      setError("");
+
       try {
-        const hasOAuthParams =
-          window.location.search.includes("code=") ||
-          window.location.hash.includes("access_token") ||
-          window.location.hash.includes("refresh_token");
-
-        if (!hasOAuthParams) {
-          return;
-        }
-
         const result = await ensureGoogleUserProfile({ defaultRole: "buyer" });
 
         if (!cancelled && result?.role) {
@@ -82,6 +80,13 @@ const LoginForm = () => {
         }
       } catch (err) {
         console.error("Google session completion error:", err);
+        if (!cancelled) {
+          setError(err.message || "Google login failed. Please try again.");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
 
